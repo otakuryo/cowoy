@@ -10,6 +10,7 @@ import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -40,22 +41,26 @@ public class Main extends Application {
 	private static final String MEDIA_URL_SOUND = fileSound.toURI().toString();
 	
 	//parametros de la ventana
+	int WITH = 1024;
+	int HEIGHT = 768;
 	StackPane root;
 	Scene scene;
+	Scene sceneg;
+	Group rootg;
  
     @Override
     public void start(Stage primaryStage) throws Exception {
     	//creamos la pantalla
         root = new StackPane();
 
-        //definimos el tamaño
-        scene = new Scene(root, 1024, 768);
+        //definimos el tamaño (para muestra practica, se pasara una uri :) )
+        scene = new Scene(root, WITH, HEIGHT);
         Video video = new Video(MEDIA_URL, MEDIA_URL_SOUND, root, scene);
-        video.start(primaryStage);
+        //video.start();
         
         //asignamos la escena a primaryStage
 		primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(sceneg);
         primaryStage.show();
     }
  

@@ -12,7 +12,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
-public class Video extends Application {
+public class Video {
 	
     //Buscamos el VIDEO y AUDIO
 	private static String MEDIA_URL;
@@ -29,8 +29,7 @@ public class Video extends Application {
 		this.scene = scene;
 	}
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void start() {
         //creamos el reproductor del video
         MediaPlayer playerSound = new MediaPlayer(new Media(MEDIA_URL_SOUND));
         MediaView mediaViewSound = new MediaView(playerSound);
