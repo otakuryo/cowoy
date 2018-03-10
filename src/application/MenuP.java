@@ -1,8 +1,16 @@
 package application;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Observable;
+
+import javax.xml.bind.Marshaller.Listener;
 
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -10,13 +18,16 @@ import javafx.stage.Stage;
 
 public class MenuP extends Application{
 	// Buscamos la imagen y lo convertimos en URI
-    private static File fileImg= new File("src/img/b0.png");
-	private static final String MEDIA_URL_IMG = fileImg.toURI().toString();
+    private static ArrayList<File> fileImgs= new ArrayList<>();
+    private static ArrayList<String> MEDIA_URL_IMG= new ArrayList<>();
+	
     ImageView background;
+    ImageView spike;
+    ImageView jet;
+    ImageView faye;
+    ImageView francoise;
     
   //parametros de la ventana
-  	StackPane root;
-  	Scene scene;
 	
 	public static void main(String[] args) {
         launch(args);
@@ -24,21 +35,59 @@ public class MenuP extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		//creamos la pantalla
-        root = new StackPane();
-
-        //definimos el tamaño
-        scene = new Scene(root, 1024, 768);
+		//Buscamos la imagen y lo convertimos en URI
+	    fileImgs.add(new File("src/img/b0.png"));
+	    fileImgs.add(new File("src/img/Select_spike.png"));
+	    fileImgs.add(new File("src/img/Select_Faye.png"));
+	    fileImgs.add(new File("src/img/Select_Jet.png"));
+	    fileImgs.add(new File("src/img/Select_Francoise.png"));
+	    for (int i = 0; i < fileImgs.size(); i++) {
+		    MEDIA_URL_IMG.add(fileImgs.get(i).toURI().toString());
+		}
         
-        //Creamos una imageview y lo ajustamos a lo alto de la pantalla     
-		background=new ImageView(MEDIA_URL_IMG);
+        //Creamos una imageview y lo ajustamos a lo alto de la pantalla   
+		background=new ImageView(MEDIA_URL_IMG.get(0));
 		background.setFitHeight(778); // no se porque se come 10 puntos al realizar set resizable :(
 		background.setPreserveRatio(true);
-		root.getChildren().add(background);
+		   
+		spike=createImage(MEDIA_URL_IMG.get(1),166,61,253);
+		faye=createImage(MEDIA_URL_IMG.get(2),491,0,313);
+		jet=createImage(MEDIA_URL_IMG.get(3),262,461,316);
+		francoise=createImage(MEDIA_URL_IMG.get(4),553,461,253);
+		
+		//creamos la pantalla y definimos el tamaño	
+        Group rootg = new Group(background,spike,faye,jet,francoise);
+        Scene sceneg = new Scene(rootg, 1024, 768);
 		
 		//asignamos la escena a primaryStage
 		primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
+        //primaryStage.setScene(scene);
+        primaryStage.setScene(sceneg);
         primaryStage.show();
+	}
+	void selectItem(ImageView image) {
+		//creamos un observable que oculte la imagen
+		image.hoverProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					image.setOpacity(1);
+				} else {
+					image.setOpacity(0);
+				}
+			}
+		});
+	}
+	
+	//propiedades de la imagen
+	ImageView createImage(String URL,double x,double y,double height) {
+		ImageView img =new ImageView(URL);
+		img.setX(x);
+		img.setY(y);
+		img.setFitHeight(height);
+		img.setOpacity(0);
+		img.setPreserveRatio(true);
+		selectItem(img);
+		return img;
 	}
 }
