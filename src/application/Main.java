@@ -54,6 +54,7 @@ public class Main extends Application {
         video.start(primaryStage);
         
         //asignamos la escena a primaryStage
+		primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
