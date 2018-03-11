@@ -1,10 +1,10 @@
 package application;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -19,15 +19,18 @@ public class Ship extends Application{
 		int HEIGHT = Pref.getHEIGHT();
 		File file,file1;
 		String uri,uri1;
-		private int vel=3;
-		ImageView ship1,rock1;
-		Circle circle,circle2;
+		private int vel=8;
+		ImageView ship1;
+		Circle circle;
 		
 	//parametros del animatortimer
 		private AnimationTimer timer;
         private int frameCount;
 		private int sec;
 		private int min;
+		
+		ArrayList<ImageView> rocks = new ArrayList<>();
+		ArrayList<Circle> bondRock = new ArrayList<>();
 		
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -42,14 +45,18 @@ public class Ship extends Application{
 		circle = boundObj(widthShip, posyCir+(widthShip/2), posxCir+(widthShip/2)); //le añadimos la mitad del ancho para que en el inicio se coloque correctamente
 		
 		//rock
-		rock1 = createObj(new File("src/img/rock1.png"), 200, 400, 400);
-		circle2=boundObj(200, 400+100, 400+100);
+		//rock1 = createObj(new File("src/img/rock1.png"), 200, WITH, 300);
+		//circle2=boundObj(200, WITH+100, 300+100);
 		
+		
+		rocks.add(createObj(new File("src/img/rock1.png"), 200, WITH, 300));
+		bondRock.add(boundObj(200, WITH+100, 300+100));
 		//rock move
-		
+		timer();
 		
 		Group root = new Group();
 		Scene scene = new Scene(root,WITH,HEIGHT);
+		
 		
 		scene.setOnMouseMoved((MouseEvent me) -> {
             //System.out.println("Mouse moved, x: " + me.getX() + ", y: " + me.getY());
@@ -59,9 +66,12 @@ public class Ship extends Application{
             circle.setTranslateX(me.getX());
             circle.setTranslateY(me.getY());
             
-            testCollision(circle,circle2);
         });
-		root.getChildren().addAll(ship1,rock1,circle,circle2);
+		for (int i = 0; i < rocks.size(); i++) {
+			root.getChildren().addAll(rocks.get(i),bondRock.get(i));
+		}
+		
+		root.getChildren().addAll(ship1,circle);
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -86,9 +96,6 @@ public class Ship extends Application{
 		cir.setTranslateY(posy);
 		return cir;
 	}
-	void transition() {
-		
-	}
 	
 	void testCollision(Circle cira, Circle cirb) {
 		
@@ -110,13 +117,22 @@ public class Ship extends Application{
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+	int posXs = WITH;
+	void move() {
+		posXs-=vel;
+		rocks.get(0).setTranslateX(posXs);
+		bondRock.get(0).setTranslateX(posXs+100);
+		if (posXs<-200) {
+			posXs = WITH;
+		}
+	}
 	void timer() {
 		//reloj
 	    timer = new AnimationTimer() {
-
 			@Override
             public void handle(long l) {
+				move();
+	            testCollision(circle,bondRock.get(0));
             	if(frameCount%60==0) {
             		sec++;
             		if (frameCount%3600==0) {
