@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 
 public class StageBase  extends Application {
 	//parametros de la ventana
-	int WITH = 1024;
-	int HEIGHT = 768;
+	int WITH = Pref.getWITH();
+	int HEIGHT = Pref.getHEIGHT();
 	//este sera nuestro escenario principal y nuestro grupo principal
 	Scene scene;
 	Group root;
@@ -25,6 +25,18 @@ public class StageBase  extends Application {
     int frameCount=0;
     int sec=0;
     int min=0;
+    
+    //parametros de juego
+    String lvl,character;
+    int ship;
+    
+    public StageBase() {}
+    
+    public StageBase(String lvlExt, int shipExt, String charExt) {
+    	lvl=lvlExt;
+    	ship=shipExt;
+    	character=charExt;
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -33,7 +45,7 @@ public class StageBase  extends Application {
 		scene = new Scene(root, WITH, HEIGHT);
 		
 		//instanciamos la clase
-		statusBar = new StatusBar("1-1","Jet");
+		statusBar = new StatusBar(lvl,character);
 		statusG = statusBar.start(primaryStage);
 		timer();
 		

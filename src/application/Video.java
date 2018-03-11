@@ -72,6 +72,7 @@ public class Video {
         player.setOnEndOfMedia(new Runnable() {
             @Override
             public void run() {
+            	player.stop();
                MenuP menuP = new MenuP();
                try {menuP.start(primaryStage);} catch (Exception e) {e.printStackTrace();}
             }

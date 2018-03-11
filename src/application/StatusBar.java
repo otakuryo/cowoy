@@ -13,12 +13,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class StatusBar {
-	//parametros de la ventana
-	int WITH = 1024;
-	int HEIGHT = 768;
+	//parametros de la ventana	
+	int WITH = Pref.getWITH();
+	int HEIGHT = Pref.getHEIGHT();
 	Scene scene;
 	Group root;
-	ImageView background;
 	
 	String lvl;
 	String character;

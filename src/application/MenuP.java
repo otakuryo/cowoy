@@ -13,9 +13,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class MenuP{
-	//parametros de la ventana
-	int WITH = 1024;
-	int HEIGHT = 768;
+	//parametros de la ventana	
+	int WITH = Pref.getWITH();
+	int HEIGHT = Pref.getHEIGHT();
 		
 	// Buscamos la imagen y lo convertimos en URI
     private static ArrayList<File> fileImgs= new ArrayList<>();
@@ -48,10 +48,10 @@ public class MenuP{
 		background.setFitHeight(778); // no se porque se come 10 puntos al realizar set resizable :(
 		background.setPreserveRatio(true);
 		   
-		spike=createImage(MEDIA_URL_IMG.get(1),166,61,253,0);
-		faye=createImage(MEDIA_URL_IMG.get(2),491,0,313,1);
-		jet=createImage(MEDIA_URL_IMG.get(3),262,461,316,2);
-		francoise=createImage(MEDIA_URL_IMG.get(4),553,461,253,3);
+		spike=createImage(MEDIA_URL_IMG.get(1),166,61,253,0,primaryStage);
+		faye=createImage(MEDIA_URL_IMG.get(2),491,0,313,1,primaryStage);
+		jet=createImage(MEDIA_URL_IMG.get(3),262,461,316,2,primaryStage);
+		francoise=createImage(MEDIA_URL_IMG.get(4),553,461,253,3,primaryStage);
 		
 		//creamos la pantalla y definimos el tamaño	
         Group rootg = new Group(background,spike,faye,jet,francoise);
@@ -63,7 +63,7 @@ public class MenuP{
         primaryStage.setScene(sceneg);
         primaryStage.show();
 	}
-	void selectItem(ImageView image,int selection) {
+	void selectItem(ImageView image,int selection,Stage primaryStage) {
 		//creamos un observable que oculte la imagen
 		image.hoverProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
@@ -80,22 +80,48 @@ public class MenuP{
 
 			@Override
 			public void handle(Event event) {
-				System.out.println("Seleccionaste a "+selection);
+				String character;
+				switch (selection) {
+				case 0:
+					character = "Spike";
+					break;
+				case 1:
+					character = "Faye";
+					break;
+				case 2:
+					character = "Jet";
+					break;
+				case 3:
+					character = "Francoise";
+					break;
+
+				default:
+					character = "ESPECIAL";
+					break;
+				}
+				StageBase stageBase = new StageBase("1-2", selection, character);
+				//System.out.println("Seleccionaste a "+selection);
 				Video.setPlayerSound(selection);
 				COWBOY = selection;
+				try {
+					stageBase.start(primaryStage);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 	}
 	
 	//propiedades de la imagen
-	ImageView createImage(String URL,double x,double y,double height,int selection) {
+	ImageView createImage(String URL,double x,double y,double height,int selection,Stage primaryStage) {
 		ImageView img =new ImageView(URL);
 		img.setX(x);
 		img.setY(y);
 		img.setFitHeight(height);
 		img.setOpacity(0);
 		img.setPreserveRatio(true);
-		selectItem(img,selection);
+		selectItem(img,selection,primaryStage);
 		return img;
 	}
 }

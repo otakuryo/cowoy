@@ -8,9 +8,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 public class Main extends Application {
 		
-	//parametros de la ventana
-	int WITH = 1024;
-	int HEIGHT = 768;
+	//parametros de la ventana	
+	int WITH = Pref.getWITH();
+	int HEIGHT = Pref.getHEIGHT();
 	StackPane root;
 	Scene scene;
  
@@ -25,6 +25,7 @@ public class Main extends Application {
         video.start(primaryStage);
         
         //asignamos la escena a primaryStage
+        primaryStage.setTitle("Cowoy Bebop by Ryo :)");
 		primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
