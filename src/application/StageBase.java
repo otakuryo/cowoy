@@ -15,10 +15,11 @@ public class StageBase  extends Application {
 	Group root;
 	
 	//grupoas a añadir
-	Group statusG;
+	Group statusG,stageFondoG;
 	
 	//clases de los grupos
 	StatusBar statusBar;
+	StageFondo stageFondo;
 	
 	//reloj
     private AnimationTimer timer;
@@ -44,12 +45,17 @@ public class StageBase  extends Application {
 		root = new Group();
 		scene = new Scene(root, WITH, HEIGHT);
 		
-		//instanciamos la clase
+		//instanciamos la clase del statusbar
 		statusBar = new StatusBar(lvl,character);
 		statusG = statusBar.start(primaryStage);
 		timer();
 		
+		//instanciamos la clase del fondo
+		stageFondo = new StageFondo();
+		stageFondoG = stageFondo.start(primaryStage);
+		
 		//añadimos al grupo principal los grupos hijos
+		root.getChildren().add(stageFondoG);
 		root.getChildren().add(statusG);
 		
 		//mostramos la escena con todos los grupos
@@ -66,6 +72,7 @@ public class StageBase  extends Application {
             @Override
             public void handle(long l) {
             	frameCount++;
+            	stageFondo.moveBackground();
             	if(frameCount%60==0) {
             		sec++;
             		if (frameCount%3600==0) {
