@@ -1,9 +1,7 @@
-package pruebas;
+package application;
 
 import java.util.ArrayList;
 
-import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -14,7 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class StatusBar  extends Application {
+public class StatusBar {
 	//parametros de la ventana
 	int WITH = 1024;
 	int HEIGHT = 768;
@@ -22,18 +20,18 @@ public class StatusBar  extends Application {
 	Group root;
 	ImageView background;
 	
-	//parametros de la barra
+	String lvl;
+	String character;
+	
+	public StatusBar(String lvlExt, String charExt) {
+		lvl = lvlExt;
+		character = charExt;
+	}
+	
+	 //parametros de la barra
 	ArrayList<Text> text;
 	
-	//reloj
-    private AnimationTimer timer;
-    int frameCount=0;
-    int sec=0;
-    int min=0;
-	
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public Group start(Stage primaryStage) throws Exception {
 		Group group = new Group();
 		
 		//creamos los cuadros de status
@@ -55,9 +53,9 @@ public class StatusBar  extends Application {
 		// creamos el texto de los cuadros
 		text = new ArrayList<>();
 		text.add(new Text("00:00"));
-		text.add(new Text("1-10"));
+		text.add(new Text(lvl));
 		text.add(new Text("00000$"));
-		text.add(new Text("Spike"));
+		text.add(new Text(character));
 		
 		
 		for (int i = 0; i < rect.size(); i++) {
@@ -76,30 +74,12 @@ public class StatusBar  extends Application {
 		    group.getChildren().add(stack);
 		}
 		
-		//reloj
-	    timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-            	frameCount++;
-            	if(frameCount%60==0) {
-            		sec++;
-            		if (frameCount%3600==0) {
-            			sec=0;
-						min++;
-					}
-            		setTexts(String.format("%02d:%02d",min, sec),0);
-            	}
-        		setTexts(String.format("%05d$",frameCount/10),2);
-            }
-        };
-        timer.start();
-	    Scene scene = new Scene(group, WITH, HEIGHT);
-	    primaryStage.setScene(scene);
-	    primaryStage.show();
+	    //Scene scene = new Scene(group, WITH, HEIGHT);
+	    //primaryStage.setScene(scene);
+	    //primaryStage.show();
+	    return group;
 	}
-	public static void main(String[] args) {
-        launch(args);
-    }
+	
 	public void setTexts(String textString, int position) {
 		text.get(position).setText(textString);
 	}
