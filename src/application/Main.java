@@ -45,8 +45,6 @@ public class Main extends Application {
 	int HEIGHT = 768;
 	StackPane root;
 	Scene scene;
-	Scene sceneg;
-	Group rootg;
  
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -56,11 +54,14 @@ public class Main extends Application {
         //definimos el tamaño (para muestra practica, se pasara una uri :) )
         scene = new Scene(root, WITH, HEIGHT);
         Video video = new Video(MEDIA_URL, MEDIA_URL_SOUND, root, scene);
-        //video.start();
+        video.start(primaryStage);
+        
+        MenuP menuP = new MenuP();
+        //menuP.start(primaryStage);
         
         //asignamos la escena a primaryStage
 		primaryStage.setResizable(false);
-        primaryStage.setScene(sceneg);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
  

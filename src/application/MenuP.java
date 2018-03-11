@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class MenuP extends Application{
+public class MenuP{
 	// Buscamos la imagen y lo convertimos en URI
     private static ArrayList<File> fileImgs= new ArrayList<>();
     private static ArrayList<String> MEDIA_URL_IMG= new ArrayList<>();
@@ -29,14 +29,6 @@ public class MenuP extends Application{
     public int getCOWBOY() {
 		return COWBOY;
 	}
-    
-  //parametros de la ventana
-	
-	public static void main(String[] args) {
-        launch(args);
-    }
-
-	@Override
 	public void start(Stage primaryStage) throws Exception {
 		//Buscamos la imagen y lo convertimos en URI
 	    fileImgs.add(new File("src/img/b0.png"));

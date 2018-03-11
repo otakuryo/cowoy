@@ -29,10 +29,12 @@ public class Video {
 		this.scene = scene;
 	}
 
-    public void start() {
+    public void start(Stage primaryStage){
         //creamos el reproductor del video
         MediaPlayer playerSound = new MediaPlayer(new Media(MEDIA_URL_SOUND));
         MediaView mediaViewSound = new MediaView(playerSound);
+        playerSound.setCycleCount(10);
+        playerSound.cycleCountProperty();
         
         //creamos el reproductor del video
         MediaPlayer player = new MediaPlayer(new Media(MEDIA_URL));
@@ -50,6 +52,15 @@ public class Video {
         mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
         mvh.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
         mediaView.setPreserveRatio(true);
+        
+        //cuando termine el video mostrar el menu :)
+        player.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+               MenuP menuP = new MenuP();
+               try {menuP.start(primaryStage);} catch (Exception e) {e.printStackTrace();}
+            }
+        });
         
         //lo reproducimos
         player.play();
