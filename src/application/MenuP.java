@@ -13,6 +13,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class MenuP{
+	//parametros de la ventana
+	int WITH = 1024;
+	int HEIGHT = 768;
+		
 	// Buscamos la imagen y lo convertimos en URI
     private static ArrayList<File> fileImgs= new ArrayList<>();
     private static ArrayList<String> MEDIA_URL_IMG= new ArrayList<>();
@@ -51,7 +55,7 @@ public class MenuP{
 		
 		//creamos la pantalla y definimos el tamaño	
         Group rootg = new Group(background,spike,faye,jet,francoise);
-        Scene sceneg = new Scene(rootg, 1024, 768);
+        Scene sceneg = new Scene(rootg, WITH, HEIGHT);
 		
 		//asignamos la escena a primaryStage
 		primaryStage.setResizable(false);
@@ -77,6 +81,7 @@ public class MenuP{
 			@Override
 			public void handle(Event event) {
 				System.out.println("Seleccionaste a "+selection);
+				Video.setPlayerSound(selection);
 				COWBOY = selection;
 			}
 		});
