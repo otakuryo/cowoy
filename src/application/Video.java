@@ -1,8 +1,5 @@
 package application;
 
-import java.io.File;
-
-import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.Scene;

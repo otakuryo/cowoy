@@ -3,7 +3,6 @@ package application;
 import java.io.File;
 import java.util.ArrayList;
 
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;

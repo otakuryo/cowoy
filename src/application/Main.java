@@ -2,34 +2,10 @@ package application;
 	
 import java.io.File;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.Observable;
-import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.effect.Lighting;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 public class Main extends Application {
 	
 	//Buscamos el VIDEO y lo convertimos en URI
@@ -55,9 +31,6 @@ public class Main extends Application {
         scene = new Scene(root, WITH, HEIGHT);
         Video video = new Video(MEDIA_URL, MEDIA_URL_SOUND, root, scene);
         video.start(primaryStage);
-        
-        MenuP menuP = new MenuP();
-        //menuP.start(primaryStage);
         
         //asignamos la escena a primaryStage
 		primaryStage.setResizable(false);
