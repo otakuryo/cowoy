@@ -133,7 +133,6 @@ public class Ship extends Application{
 			}
 		}
 		//bondRock.get(0).setTranslateX(posXs+100);
-		
 	}
 	void timer() {
 		//reloj
