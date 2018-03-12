@@ -1,59 +1,128 @@
 package pruebas;
 
 import java.io.File;
+import java.util.ArrayList;
 
+import application.Pref;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-public class ImageInCircleExample extends Application {
+public class ImageInCircleExample extends Application{
+	//parametros de la ventana
+	int WITH = Pref.getWITH();
+	int HEIGHT = Pref.getHEIGHT();
+	ImageView rocks;
+	Circle bondRock;
+	int positionX=0,positionY=0;
+	int wImg = 180,rImg=wImg/2;
+	private String uri;
+	private AnimationTimer timer;
+	private int vel=6;
+	public static void main(String[] args) {
+		launch(args);
+	}
+	public ImageInCircleExample() {
+		// TODO Auto-generated constructor stub
+	}
+	public ImageInCircleExample(int velocidad) {
+		vel = velocidad;
+	}
+	public void setVel(int vel) {
+		this.vel = vel;
+	}
+	
+	public ImageView getRocks() {
+		return rocks;
+	}
+	public Circle getBondRock() {
+		return bondRock;
+	}
 
-    @Override
-    public void start(Stage primaryStage) {
-        final Pane root = new Pane();
-        final ImageView imageView = new ImageView(new String(new File("src/img/rock1.png").toURI().toString()));
-        final Circle clip = new Circle(120, 120, 120);
-        imageView.setClip(clip);
-        clip.setStroke(Color.BLUE);
-        root.getChildren().add(imageView);
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+        final Group root = new Group();
+		// TODO Auto-generated method stub
+        createObj();
+		timer();
+		root.getChildren().addAll(rocks,bondRock);
 
-        final Scene scene = new Scene(root, 600, 400);
+        final Scene scene = new Scene(root, WITH, HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
+		
+	}
+	void createObj() {
+		int positionY = (int) (Math.random() * 600) + 1;
+		//int widthRock = (int) (Math.random() * 200) + 100;
+		rocks=createObj(new File("src/img/rock1.png"), wImg, WITH, positionY);
+		bondRock=boundObj(wImg, WITH, positionY);
+	}
+	
+	ImageView createObj(File file,int width,double posx,double posy) {
+		uri = file.toURI().toString();
+		ImageView imageview = new ImageView(uri);
+		imageview.setFitWidth(width);
+		imageview.setTranslateX(posx);
+		imageview.setTranslateY(posy);
+		imageview.setPreserveRatio(true);
+		return imageview;
+	}
+	
+	Circle boundObj(int width,double posx,double posy) {
+		Circle cir = new Circle(width/2);
+		cir.setFill(null);
+		cir.setStroke(Color.BLUE);
+		cir.setTranslateX(posx+rImg);
+		cir.setTranslateY(posy+rImg);
+		return cir;
+	}
+	
+	void setPositionObj() {
+		positionY = (int) (Math.random() * HEIGHT) + 1;
+		positionX = (int) (Math.random() * WITH/2) + WITH;
+		rocks.setTranslateX(positionX);
+		rocks.setTranslateY(positionY);
+		bondRock.setTranslateX(positionX+rImg);
+		bondRock.setTranslateY(positionY+rImg);
+	}
+	
+	void move() {
+		positionX-=vel;
+		rocks.setTranslateX(positionX);
+		bondRock.setTranslateX(positionX+rImg);
+		if (positionX<-300) {
+			setPositionObj();
+		}
+	}
+	
+	void timer() {
+		//reloj
+	    timer = new AnimationTimer() {
+			private int frameCount=0;
+			private int sec;
+			private int min;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-    /*
-      // enable dragging:
-        final ObjectProperty<Point2D> mouseAnchor = new SimpleObjectProperty<>();
-        imageView.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY()));
+			@Override
+            public void handle(long l) {
+				frameCount++;
+				move();
+            	if(frameCount%60==0) {
+            		sec++;
+            		if (frameCount%3600==0) {
+            			sec=0;
+						min++;
+					}
+            	}
             }
-        });
-        imageView.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                double deltaX = event.getSceneX() - mouseAnchor.get().getX();
-                double deltaY = event.getSceneY() - mouseAnchor.get().getY();
-                imageView.setLayoutX(imageView.getLayoutX() + deltaX);
-                imageView.setLayoutY(imageView.getLayoutY() + deltaY);
-                clip.setCenterX(clip.getCenterX() - deltaX);
-                clip.setCenterY(clip.getCenterY() - deltaY);
-                mouseAnchor.set(new Point2D(event.getSceneX(), event.getSceneY()));
-            }
-        });
-     */
+        };
+        timer.start();
+	}
+
 }

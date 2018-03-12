@@ -1,7 +1,10 @@
 package application;
 
+import java.util.ArrayList;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -20,6 +23,9 @@ public class StageBase  extends Application {
 	//clases de los grupos
 	StatusBar statusBar;
 	StageFondo stageFondo;
+	SuperShip superShip;
+	RockA rockA,rockB;
+	ArrayList<RockA> rocks;
 	
 	//reloj
     private AnimationTimer timer;
@@ -30,6 +36,7 @@ public class StageBase  extends Application {
     //parametros de juego
     String lvl,character;
     int ship;
+    int vel=1;
     
     public StageBase() {}
     
@@ -48,17 +55,33 @@ public class StageBase  extends Application {
 		//instanciamos la clase del statusbar
 		statusBar = new StatusBar(lvl,character);
 		statusG = statusBar.start(primaryStage);
+		superShip = new SuperShip(scene);
 		timer();
 		
 		//instanciamos la clase del fondo
 		stageFondo = new StageFondo();
 		stageFondoG = stageFondo.start(primaryStage);
 		
+		//instanciamos la nave
+		superShip.createShip();
+		
 		//añadimos al grupo principal los grupos hijos
 		root.getChildren().add(stageFondoG);
 		root.getChildren().add(statusG);
 		
+		root.getChildren().addAll(superShip.getShip1(),superShip.getCircle());
+		
+		//instanciamos el meteoro
+		rocks = new ArrayList<>();
+		int count=vel*3;
+		for (int i = 0; i < count; i++) {
+			rocks.add(new RockA(6));
+			rocks.get(i).createObj();
+			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock());
+		}
+		
 		//mostramos la escena con todos los grupos
+		scene.setCursor(Cursor.NONE); // para ocultar el mouse
 		primaryStage.setScene(scene);
 	    primaryStage.show();
 	}
@@ -72,7 +95,13 @@ public class StageBase  extends Application {
             @Override
             public void handle(long l) {
             	frameCount++;
+            	
             	stageFondo.moveBackground();
+            	for (int i = 0; i < rocks.size(); i++) {
+            		rocks.get(i).move();
+            		rocks.get(i).searchCollision(superShip.getCircle());
+				}
+            	
             	if(frameCount%60==0) {
             		sec++;
             		if (frameCount%3600==0) {

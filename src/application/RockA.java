@@ -1,19 +1,11 @@
 package application;
 
 import java.io.File;
-import java.util.ArrayList;
-
-import javafx.animation.AnimationTimer;
-import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 
-public class RockA extends Application{
+public class RockA{
 	//parametros de la ventana
 	int WITH = Pref.getWITH();
 	int HEIGHT = Pref.getHEIGHT();
@@ -21,46 +13,27 @@ public class RockA extends Application{
 	Circle bondRock;
 	int positionX=0,positionY=0;
 	int wImg = 180,rImg=wImg/2;
-	private String uri;
-	private AnimationTimer timer;
+	private String uri,file="src/img/rock1.png";
 	private int vel=6;
-	public static void main(String[] args) {
-		launch(args);
-	}
 	
-	public ImageView getRocks() {
-		return rocks;
-	}
-	public Circle getBondRock() {
-		return bondRock;
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-        final Group root = new Group();
-		// TODO Auto-generated method stub
-        createObj();
-		timer();
-		root.getChildren().addAll(rocks,bondRock);
-
-        final Scene scene = new Scene(root, WITH, HEIGHT);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-		
-	}
+	public RockA() {}
+	public RockA(int velocidad) {vel = velocidad;}
+	public void setVel(int vel) {this.vel = vel;}
+	public ImageView getRocks() {return rocks;}
+	public Circle getBondRock() {return bondRock;}
+	
 	void createObj() {
 		int positionY = (int) (Math.random() * 600) + 1;
-		//int widthRock = (int) (Math.random() * 200) + 100;
-		rocks=createObj(new File("src/img/rock1.png"), wImg, WITH, positionY);
+		//positionX = (int) (Math.random() * WITH/2) + WITH;
+		rocks=createObj(new File(file), wImg, WITH, positionY);
 		bondRock=boundObj(wImg, WITH, positionY);
+		setPositionObj();
 	}
 	
 	ImageView createObj(File file,int width,double posx,double posy) {
 		uri = file.toURI().toString();
 		ImageView imageview = new ImageView(uri);
 		imageview.setFitWidth(width);
-		imageview.setTranslateX(posx);
-		imageview.setTranslateY(posy);
 		imageview.setPreserveRatio(true);
 		return imageview;
 	}
@@ -68,9 +41,7 @@ public class RockA extends Application{
 	Circle boundObj(int width,double posx,double posy) {
 		Circle cir = new Circle(width/2);
 		cir.setFill(null);
-		cir.setStroke(Color.BLUE);
-		cir.setTranslateX(posx+rImg);
-		cir.setTranslateY(posy+rImg);
+		cir.setStroke(Color.TRANSPARENT);
 		return cir;
 	}
 	
@@ -82,6 +53,19 @@ public class RockA extends Application{
 		bondRock.setTranslateX(positionX+rImg);
 		bondRock.setTranslateY(positionY+rImg);
 	}
+	void searchCollision(Circle nave) {
+		boolean collision = false;
+		if (nave.getBoundsInParent().intersects(bondRock.getBoundsInParent())) {
+			double dx = nave.getTranslateX()-bondRock.getTranslateX();
+			double dy = nave.getTranslateY()-bondRock.getTranslateY();
+			double minDist = nave.getRadius() + bondRock.getRadius();
+			double distancexx = Math.sqrt(dx * dx + dy * dy);
+			if(distancexx<minDist){
+				collision = true;
+			}
+		}
+		if (collision) {System.out.println("colision");}
+	}
 	
 	void move() {
 		positionX-=vel;
@@ -91,7 +75,7 @@ public class RockA extends Application{
 			setPositionObj();
 		}
 	}
-	
+	/*
 	void timer() {
 		//reloj
 	    timer = new AnimationTimer() {
@@ -114,5 +98,6 @@ public class RockA extends Application{
         };
         timer.start();
 	}
+	*/
 
 }
