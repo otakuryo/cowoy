@@ -53,7 +53,7 @@ public class RockA{
 		bondRock.setTranslateX(positionX+rImg);
 		bondRock.setTranslateY(positionY+rImg);
 	}
-	void searchCollision(Circle nave) {
+	boolean searchCollision(Circle nave) {
 		boolean collision = false;
 		if (nave.getBoundsInParent().intersects(bondRock.getBoundsInParent())) {
 			double dx = nave.getTranslateX()-bondRock.getTranslateX();
@@ -64,7 +64,7 @@ public class RockA{
 				collision = true;
 			}
 		}
-		if (collision) {System.out.println("colision");}
+		return collision;
 	}
 	
 	void move() {
@@ -75,6 +75,7 @@ public class RockA{
 			setPositionObj();
 		}
 	}
+	
 	/*
 	void timer() {
 		//reloj

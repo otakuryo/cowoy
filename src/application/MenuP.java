@@ -101,12 +101,13 @@ public class MenuP{
 				}
 				StageBase stageBase = new StageBase("1-2", selection, character);
 				//System.out.println("Seleccionaste a "+selection);
-				Video.setPlayerSound(selection);
+				try {
+					Video.setPlayerSound(selection);
+				} catch (Exception e) {}
 				COWBOY = selection;
 				try {
 					stageBase.start(primaryStage);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

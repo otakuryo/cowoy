@@ -1,6 +1,8 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.TimeUnit;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -13,6 +15,7 @@ public class StageBase  extends Application {
 	//parametros de la ventana
 	int WITH = Pref.getWITH();
 	int HEIGHT = Pref.getHEIGHT();
+    boolean pause = false; //si nos morimos, para la animacion y todo :)
 	//este sera nuestro escenario principal y nuestro grupo principal
 	Scene scene;
 	Group root;
@@ -48,6 +51,7 @@ public class StageBase  extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		pause = false;
 		//Instanciamos el grupo y escena principal
 		root = new Group();
 		scene = new Scene(root, WITH, HEIGHT);
@@ -56,7 +60,7 @@ public class StageBase  extends Application {
 		statusBar = new StatusBar(lvl,character);
 		statusG = statusBar.start(primaryStage);
 		superShip = new SuperShip(scene);
-		timer();
+		timer(primaryStage);
 		
 		//instanciamos la clase del fondo
 		stageFondo = new StageFondo();
@@ -88,29 +92,59 @@ public class StageBase  extends Application {
 	public static void main(String[] args) {
         launch(args);
     }
-	
-	void timer() {
+	void reset() {
+		frameCount=0;
+		sec=0;
+		min=0;
+	}
+
+	static boolean firstEnter = true;
+	void timer(Stage primary) {
 		//reloj
 	    timer = new AnimationTimer() {
-            @Override
+
+			@Override
             public void handle(long l) {
-            	frameCount++;
-            	
-            	stageFondo.moveBackground();
-            	for (int i = 0; i < rocks.size(); i++) {
-            		rocks.get(i).move();
-            		rocks.get(i).searchCollision(superShip.getCircle());
-				}
-            	
-            	if(frameCount%60==0) {
-            		sec++;
-            		if (frameCount%3600==0) {
-            			sec=0;
-						min++;
+            	frameCount++; //cuenta los fps
+				if (!pause) {
+	            	stageFondo.moveBackground(); // mueve el fondo de pantalla
+	            	for (int i = 0; i < rocks.size(); i++) {
+	            		rocks.get(i).move(); // mueve las rocas :)
+	            		if(rocks.get(i).searchCollision(superShip.getCircle())) {
+	            			pause = true;
+	            		}
 					}
-            		statusBar.setTexts(String.format("%02d:%02d",min, sec),0);
-            	}
-            	statusBar.setTexts(String.format("%05d$",frameCount/10),2);
+	            	
+	            	if(frameCount%60==0) {
+	            		sec++;
+	            		if (frameCount%3600==0) {
+	            			sec=0;
+							min++;
+						}
+	            		statusBar.setTexts(String.format("%02d:%02d",min, sec),0);
+	            	}
+	            	statusBar.setTexts(String.format("%05d$",frameCount/10),2);
+					
+				}else {
+					if (firstEnter) {
+						firstEnter=false;
+						DeathScreen ds = new DeathScreen(); //crea la pantalla de la muerte
+	        			ds.backSet();
+	        			root.getChildren().add(ds.getBackground());
+	        			reset();
+					}
+        			if (frameCount>180) {
+						System.out.println("perfecto :)");
+						//root.getChildren().remove(root.getChildren().size()-1);
+						root.getChildren().clear();
+						System.out.println(root.getChildren().size());
+						for (int i = 0; i < rocks.size(); i++) {
+							rocks.get(i).setPositionObj();
+						}
+						firstEnter=true;
+						pause=false;
+					}
+				}
             }
         };
         timer.start();
