@@ -31,26 +31,22 @@ public class Ship extends Application{
 		
 		ArrayList<ImageView> rocks = new ArrayList<>();
 		ArrayList<Circle> bondRock = new ArrayList<>();
+		ArrayList<Integer> positionX = new ArrayList<>();
 		
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		int widthShip = 200;
+		int widthShip = 120;
 		int posxShip = 0;
 		int posyShip = 300;
 		int posyCir = 0;
 		int posxCir =300;
 		
 		//creamos el objeto con su respectivo campo de colision
-		ship1 = createObj(new File("src/img/SwordfishII.png"), widthShip, posxShip, posyShip);
+		ship1 = createObj(new File("src/img/SwordfishII.png"), widthShip+5, posxShip, posyShip);
 		circle = boundObj(widthShip, posyCir+(widthShip/2), posxCir+(widthShip/2)); //le añadimos la mitad del ancho para que en el inicio se coloque correctamente
 		
-		//rock
-		//rock1 = createObj(new File("src/img/rock1.png"), 200, WITH, 300);
-		//circle2=boundObj(200, WITH+100, 300+100);
-		
-		
-		rocks.add(createObj(new File("src/img/rock1.png"), 200, WITH, 300));
-		bondRock.add(boundObj(200, WITH+100, 300+100));
+		test();
+		test();
 		//rock move
 		timer();
 		
@@ -76,11 +72,17 @@ public class Ship extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
+	void test() {
+		int positionY = (int) (Math.random() * 600) + 1;
+		//int widthRock = (int) (Math.random() * 200) + 100;
+		rocks.add(createObj(new File("src/img/rock1.png"), 180, WITH, positionY));
+		bondRock.add(boundObj(180, WITH+90, positionY+90));
+		positionX.add(WITH);
+	}
 	
 	ImageView createObj(File file,int width,double posx,double posy) {
 		uri = file.toURI().toString();
 		ImageView imageview = new ImageView(uri);
-		width = 200;
 		imageview.setFitWidth(width);
 		imageview.setTranslateX(posx);
 		imageview.setTranslateY(posy);
@@ -97,21 +99,20 @@ public class Ship extends Application{
 		return cir;
 	}
 	
-	void testCollision(Circle cira, Circle cirb) {
-		
-		boolean collision = false;
-		if (cira.getBoundsInParent().intersects(cirb.getBoundsInParent())) {
-			double dx = cira.getTranslateX()-cirb.getTranslateX();
-			double dy = cira.getTranslateY()-cirb.getTranslateY();
-			double minDist = cira.getRadius() + cirb.getRadius();
-			double distance = Math.sqrt(dx * dx + dy * dy);
-			if(distance<minDist){
-				collision = true;
+	void testCollision() {
+		for (int i = 0; i < bondRock.size(); i++) {
+			boolean collision = false;
+			if (circle.getBoundsInParent().intersects(bondRock.get(i).getBoundsInParent())) {
+				double dx = circle.getTranslateX()-bondRock.get(i).getTranslateX();
+				double dy = circle.getTranslateY()-bondRock.get(i).getTranslateY();
+				double minDist = circle.getRadius() + bondRock.get(i).getRadius();
+				double distancexx = Math.sqrt(dx * dx + dy * dy);
+				if(distancexx<minDist){
+					collision = true;
+				}
 			}
+			if (collision) {System.out.println("colision");}
 		}
-		if (collision) {
-		    System.out.println("colision");
-		  }
 	}
 	
 	public static void main(String[] args) {
@@ -120,11 +121,19 @@ public class Ship extends Application{
 	int posXs = WITH;
 	void move() {
 		posXs-=vel;
-		rocks.get(0).setTranslateX(posXs);
-		bondRock.get(0).setTranslateX(posXs+100);
-		if (posXs<-200) {
-			posXs = WITH;
+		for (int i = 0; i < rocks.size(); i++) {
+			positionX.set(i, positionX.get(i)-vel);
+			rocks.get(i).setTranslateX(positionX.get(i));
+			bondRock.get(i).setTranslateX(positionX.get(i)+100);
+			if (positionX.get(i)<-200) {
+				positionX.set(i, WITH);
+				int positionY = (int) (Math.random() * 600) + 1;
+				rocks.get(i).setTranslateY(positionY);
+				bondRock.get(i).setTranslateY(positionY+100);
+			}
 		}
+		//bondRock.get(0).setTranslateX(posXs+100);
+		
 	}
 	void timer() {
 		//reloj
@@ -132,7 +141,7 @@ public class Ship extends Application{
 			@Override
             public void handle(long l) {
 				move();
-	            testCollision(circle,bondRock.get(0));
+	            testCollision();
             	if(frameCount%60==0) {
             		sec++;
             		if (frameCount%3600==0) {
