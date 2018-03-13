@@ -99,7 +99,7 @@ public class MenuP{
 					character = "ESPECIAL";
 					break;
 				}
-				StageBase stageBase = new StageBase("1-2", selection, character);
+				StageBase stageBase = new StageBase("1", selection, character);
 				//System.out.println("Seleccionaste a "+selection);
 				try {
 					Video.setPlayerSound(selection);

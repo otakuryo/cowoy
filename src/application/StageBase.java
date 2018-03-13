@@ -1,8 +1,6 @@
 package application;
 
 import java.util.ArrayList;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.TimeUnit;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -39,7 +37,7 @@ public class StageBase  extends Application {
     //parametros de juego
     String lvl,character;
     int ship;
-    int vel=1;
+    int vel=2;
     
     public StageBase() {}
     
@@ -77,9 +75,9 @@ public class StageBase  extends Application {
 		
 		//instanciamos el meteoro
 		rocks = new ArrayList<>();
-		int count=vel*3;
+		int count=vel*2;
 		for (int i = 0; i < count; i++) {
-			rocks.add(new RockA(6));
+			rocks.add(new RockA(vel*3));
 			rocks.get(i).createObj();
 			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock());
 		}
@@ -97,8 +95,7 @@ public class StageBase  extends Application {
 		sec=0;
 		min=0;
 	}
-
-	static boolean firstEnter = true;
+	int score = 0;
 	void timer(Stage primary) {
 		//reloj
 	    timer = new AnimationTimer() {
@@ -117,33 +114,31 @@ public class StageBase  extends Application {
 	            	
 	            	if(frameCount%60==0) {
 	            		sec++;
+		            	score+=vel;
+		            	//cada x secundos aumenta la velocidad
+	            		if (sec%5==0) {
+	            			statusBar.setTexts(String.format("%02d-1",sec/5),1);//ponemos el nivel actual
+							for (int j = 0; j < rocks.size(); j++) {
+								vel+=1;
+								rocks.get(j).setVel(vel);
+							}
+						}
 	            		if (frameCount%3600==0) {
 	            			sec=0;
 							min++;
+							
 						}
 	            		statusBar.setTexts(String.format("%02d:%02d",min, sec),0);
 	            	}
-	            	statusBar.setTexts(String.format("%05d$",frameCount/10),2);
+	            	statusBar.setTexts(String.format("%05d$",score),2);
 					
 				}else {
-					if (firstEnter) {
-						firstEnter=false;
-						DeathScreen ds = new DeathScreen(); //crea la pantalla de la muerte
-	        			ds.backSet();
-	        			root.getChildren().add(ds.getBackground());
-	        			reset();
-					}
-        			if (frameCount>180) {
-						System.out.println("perfecto :)");
-						//root.getChildren().remove(root.getChildren().size()-1);
-						root.getChildren().clear();
-						System.out.println(root.getChildren().size());
-						for (int i = 0; i < rocks.size(); i++) {
-							rocks.get(i).setPositionObj();
-						}
-						firstEnter=true;
-						pause=false;
-					}
+					DeathScreen ds = new DeathScreen(); //crea la pantalla de la muerte
+					try {ds.start(primary,score,character);} catch (Exception e) {e.printStackTrace();}
+        			timer.stop(); //se para el contador
+        			//root.getChildren().add(ds.getBackground());
+					root.getChildren().clear(); // se limpia el escenario
+        			reset(); // y se ponen los valores a 0
 				}
             }
         };

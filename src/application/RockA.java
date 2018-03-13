@@ -16,7 +16,6 @@ public class RockA{
 	private String uri,file="src/img/rock1.png";
 	private int vel=6;
 	
-	public RockA() {}
 	public RockA(int velocidad) {vel = velocidad;}
 	public void setVel(int vel) {this.vel = vel;}
 	public ImageView getRocks() {return rocks;}
@@ -47,7 +46,7 @@ public class RockA{
 	
 	void setPositionObj() {
 		positionY = (int) (Math.random() * HEIGHT) + 1;
-		positionX = (int) (Math.random() * WITH/2) + WITH;
+		positionX = (int) (Math.random() * WITH/1.2) + WITH;
 		rocks.setTranslateX(positionX);
 		rocks.setTranslateY(positionY);
 		bondRock.setTranslateX(positionX+rImg);

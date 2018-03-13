@@ -3,10 +3,12 @@ package application;
 import java.io.File;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class DeathScreen{
@@ -15,18 +17,21 @@ public class DeathScreen{
 	int HEIGHT = Pref.getHEIGHT();
 
 	private ImageView background;
+	private Text scoreTxt;
 	private String MEDIA_URL_IMG,MEDIA_FILE = "src/img/death.png";
 	private AnimationTimer timer;
 
 	public ImageView getBackground() {
 		return background;
 	}
-	public boolean start(Stage primaryStage) throws Exception {
-		//timer();
+	public boolean start(Stage primaryStage,int score,String pilot) throws Exception {
+		timer(primaryStage);
 		backSet();
+		setScore(score,pilot);
 		Group root = new Group();
 		Scene scene = new Scene(root,WITH,HEIGHT);
 		root.getChildren().add(background);
+		root.getChildren().add(scoreTxt);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		return false;
@@ -42,13 +47,22 @@ public class DeathScreen{
 		background.setPreserveRatio(true);
 	}
 
+	void setScore(int score,String pilot) {
+		scoreTxt = new Text();
+		scoreTxt.setText(pilot+": "+String.format("%05d$",score));
+		scoreTxt.setTextAlignment(TextAlignment.CENTER);
+		scoreTxt.setFill(Color.WHITE);
+		scoreTxt.setStyle("-fx-font: 62 arial;");
+		scoreTxt.setTranslateX(0);
+		scoreTxt.setWrappingWidth(WITH);
+		scoreTxt.setTranslateY((HEIGHT/2)-150);
+	}
 	static boolean pause = false;
-	boolean timer() {
+	boolean timer(Stage primaryStage) {
 		//reloj
 	    timer = new AnimationTimer() {
 			private int frameCount=0;
 			private int sec;
-			private int min;
 
 			@Override
             public void handle(long l) {
@@ -56,7 +70,15 @@ public class DeathScreen{
             	if(frameCount%60==0) {
             		sec++;
             		if (sec > 3) {
+            			timer.stop();
 						pause = true;
+						MenuP menuP = new MenuP();
+						try {
+							menuP.start(primaryStage);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						//System.out.println("perfecto :)");
 					}
             	}
             }
