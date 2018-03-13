@@ -16,7 +16,7 @@ public class RockA{
 	private String uri,file="src/img/rock1.png";
 	private int vel=6;
 	
-	public RockA(int velocidad) {vel = velocidad;}
+	public RockA(int velocidad,String file) {vel = velocidad;this.file = file;}
 	public void setVel(int vel) {this.vel = vel;}
 	public ImageView getRocks() {return rocks;}
 	public Circle getBondRock() {return bondRock;}

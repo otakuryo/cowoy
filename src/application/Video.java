@@ -40,7 +40,9 @@ public class Video {
     public void start(Stage primaryStage){
     	//agregamos la musica
     	fileSounds.add(new File("src/sound.m4a"));
+    	fileSounds.add(new File("src/catsMars.mp3"));
     	fileSounds.add(new File("src/sound.m4a"));
+    	fileSounds.add(new File("src/catsMars.mp3"));
     	for (int i = 0; i < fileSounds.size(); i++) {
     		MEDIA_URL_SOUNDS.add(fileSounds.get(i).toURI().toString());
 		}

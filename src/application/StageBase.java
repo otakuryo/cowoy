@@ -25,7 +25,7 @@ public class StageBase  extends Application {
 	StatusBar statusBar;
 	StageFondo stageFondo;
 	SuperShip superShip;
-	RockA rockA,rockB;
+	RockA itemScore;
 	ArrayList<RockA> rocks;
 	
 	//reloj
@@ -57,7 +57,7 @@ public class StageBase  extends Application {
 		//instanciamos la clase del statusbar
 		statusBar = new StatusBar(lvl,character);
 		statusG = statusBar.start(primaryStage);
-		superShip = new SuperShip(scene);
+		superShip = new SuperShip(scene,ship);
 		timer(primaryStage);
 		
 		//instanciamos la clase del fondo
@@ -77,10 +77,14 @@ public class StageBase  extends Application {
 		rocks = new ArrayList<>();
 		int count=vel*2;
 		for (int i = 0; i < count; i++) {
-			rocks.add(new RockA(vel*3));
+			rocks.add(new RockA(vel*3,"src/img/rock1.png"));
 			rocks.get(i).createObj();
 			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock());
 		}
+		//instanciamos el objeto extra :)
+		itemScore=new RockA(vel*3, "src/img/photo.jpg");
+		itemScore.createObj();
+		root.getChildren().addAll(itemScore.getRocks(),itemScore.getBondRock());
 		
 		//mostramos la escena con todos los grupos
 		scene.setCursor(Cursor.NONE); // para ocultar el mouse
@@ -107,9 +111,13 @@ public class StageBase  extends Application {
 	            	stageFondo.moveBackground(); // mueve el fondo de pantalla
 	            	for (int i = 0; i < rocks.size(); i++) {
 	            		rocks.get(i).move(); // mueve las rocas :)
+	            		itemScore.move(); // mueve el item extra :)
 	            		if(rocks.get(i).searchCollision(superShip.getCircle())) {
 	            			pause = true;
 	            		}
+	            		if (itemScore.searchCollision(superShip.getCircle())) {
+							score++;
+						}
 					}
 	            	
 	            	if(frameCount%60==0) {
@@ -122,6 +130,7 @@ public class StageBase  extends Application {
 								vel+=1;
 								rocks.get(j).setVel(vel);
 							}
+							itemScore.setVel(vel/2);
 						}
 	            		if (frameCount%3600==0) {
 	            			sec=0;

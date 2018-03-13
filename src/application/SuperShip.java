@@ -26,8 +26,26 @@ public class SuperShip{
 	
 	//escenario
 	Scene scene;
-	public SuperShip(Scene scene) {
+	public SuperShip(Scene scene,int nave) {
 		this.scene = scene;
+		switch (nave) {
+		case 0:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		case 1:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		case 2:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		case 3:
+			pathFile="src/img/SwordfishII.png";
+			break;
+
+		default:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		}
 	}
 	
 	public ImageView getShip1() {
