@@ -14,16 +14,19 @@ public class StageFondo{
 		String uri;
 		private int posb0=0,posb1=2048; //interesante :o
 		private int vel=3;
-		ImageView background, background1,background2;
-	public StageFondo() {}
-	public StageFondo(int velExt,File fileExt) {
-		vel=velExt;
-		file = fileExt;
+		ImageView background, background1;
+		private int nave;
+	public StageFondo(int nave) {
+		this.nave=nave;
 	}
 	
 	public Group start(Stage primaryStage) throws Exception {
 		//obtenemos el uri de el file, y lo ponemos en pantalla
-		file = new File("src/img/background.png");
+		if (nave==3) {
+			file = new File("src/img/backgroundb.png");
+		}else {
+			file = new File("src/img/background.png");
+		}
 		uri = file.toURI().toString();
 		background=new ImageView(uri);
 		background1=new ImageView(uri);

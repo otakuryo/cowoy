@@ -4,13 +4,9 @@ import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class StageBase  extends Application {
@@ -40,7 +36,7 @@ public class StageBase  extends Application {
     
     //parametros de juego
     String lvl,character;
-    int ship;
+    int ship=3;
     int vel=2;
     
     public StageBase() {}
@@ -66,7 +62,7 @@ public class StageBase  extends Application {
 		timer(primaryStage);
 		
 		//instanciamos la clase del fondo
-		stageFondo = new StageFondo();
+		stageFondo = new StageFondo(ship);
 		stageFondoG = stageFondo.start(primaryStage);
 		
 		//añadimos al grupo principal los grupos hijos
@@ -75,7 +71,7 @@ public class StageBase  extends Application {
 		
 		
 		//instanciamos el objeto extra :)
-		itemScore=new RockA(vel*3, "src/img/photo.jpg");
+		itemScore=new RockA(vel*3,3);
 		itemScore.createObj();
 		root.getChildren().addAll(itemScore.getRocks(),itemScore.getBondRock());
 
@@ -87,7 +83,7 @@ public class StageBase  extends Application {
 		rocks = new ArrayList<>();
 		int count=vel*2;
 		for (int i = 0; i < count; i++) {
-			rocks.add(new RockA(vel*3,"src/img/rock1.png")); //añadimos una roca al arraylist
+			rocks.add(new RockA(vel*3,ship)); //añadimos una roca al arraylist
 			rocks.get(i).createObj(); //iniciamos el metodo de configuracion
 			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock()); //se añade al escenario
 		}

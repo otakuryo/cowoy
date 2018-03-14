@@ -94,7 +94,7 @@ public class MenuP{
 					character = "Jet";
 					break;
 				case 3:
-					character = "Francoise";
+					character = "Ein-Ed";
 					break;
 
 				default:
