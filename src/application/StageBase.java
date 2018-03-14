@@ -53,6 +53,7 @@ public class StageBase  extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		//El orden en que se coloca en el esceneario es muy importante Xo
 		pause = false;
 		//Instanciamos el grupo y escena principal
 		root = new Group();
@@ -68,72 +69,29 @@ public class StageBase  extends Application {
 		stageFondo = new StageFondo();
 		stageFondoG = stageFondo.start(primaryStage);
 		
-		//instanciamos la nave
-		superShip.createShip();
-		//funcion de teclas :)
-		
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				switch (event.getCode()) {
-				case UP:
-	            	superShip.move(1);
-					break;
-				case DOWN:
-	            	superShip.move(0);
-					break;
-				case LEFT:
-	            	superShip.move(2);
-					break;
-				case RIGHT:
-	            	superShip.move(3);
-					break;
-				default:
-					break;
-				}
-			}
-		});
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				switch (event.getCode()) {
-				case UP:
-	            	superShip.move(1);
-					break;
-				case DOWN:
-	            	superShip.move(0);
-					break;
-				case LEFT:
-	            	superShip.move(2);
-					break;
-				case RIGHT:
-	            	superShip.move(3);
-					break;
-				default:
-					break;
-				}
-			}
-		});
-		
 		//añadimos al grupo principal los grupos hijos
 		root.getChildren().add(stageFondoG);
 		root.getChildren().add(statusG);
 		
-		root.getChildren().addAll(superShip.getShip1(),superShip.getCircle());
 		
-		//instanciamos el meteoro
-		rocks = new ArrayList<>();
-		int count=vel*2;
-		for (int i = 0; i < 1; i++) {
-			rocks.add(new RockA(vel*3,"src/img/rock1.png"));
-			rocks.get(i).createObj();
-			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock());
-		}
 		//instanciamos el objeto extra :)
 		itemScore=new RockA(vel*3, "src/img/photo.jpg");
 		itemScore.createObj();
 		root.getChildren().addAll(itemScore.getRocks(),itemScore.getBondRock());
-		
+
+		//instanciamos la nave
+		superShip.createShip();
+		root.getChildren().addAll(superShip.getShip1(),superShip.getCircle());
+
+		//instanciamos el meteoro
+		rocks = new ArrayList<>();
+		int count=vel*2;
+		for (int i = 0; i < count; i++) {
+			rocks.add(new RockA(vel*3,"src/img/rock1.png")); //añadimos una roca al arraylist
+			rocks.get(i).createObj(); //iniciamos el metodo de configuracion
+			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock()); //se añade al escenario
+		}
+				
 		//mostramos la escena con todos los grupos
 		scene.setCursor(Cursor.NONE); // para ocultar el mouse
 		primaryStage.setScene(scene);
@@ -155,6 +113,7 @@ public class StageBase  extends Application {
 			@Override
             public void handle(long l) {
             	frameCount++; //cuenta los fps
+            	superShip.move();
 				if (!pause) {
 	            	stageFondo.moveBackground(); // mueve el fondo de pantalla
 	            	for (int i = 0; i < rocks.size(); i++) {
