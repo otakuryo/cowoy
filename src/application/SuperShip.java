@@ -2,11 +2,8 @@ package application;
 
 import java.io.File;
 
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -21,6 +18,7 @@ public class SuperShip{
 	String uri,pathFile="src/img/SwordfishII.png";
 	ImageView ship1;
 	Circle circle;
+	int nave;
 	int widthShip = 120;
 	int posxShip = 0;
 	int posyShip = 300;
@@ -31,18 +29,19 @@ public class SuperShip{
 	Scene scene;
 	public SuperShip(Scene scene,int nave) {
 		this.scene = scene;
+		this.nave = nave;
 		switch (nave) {
 		case 0:
 			pathFile="src/img/SwordfishII.png";
 			break;
 		case 1:
-			pathFile="src/img/SwordfishII.png";
+			pathFile="src/img/Faye.png";
 			break;
 		case 2:
-			pathFile="src/img/SwordfishII.png";
+			pathFile="src/img/Jet.png";
 			break;
 		case 3:
-			pathFile="src/img/SwordfishII.png";
+			pathFile="src/img/Ein.png";
 			break;
 
 		default:
@@ -96,7 +95,11 @@ public class SuperShip{
 	ImageView createObj(File file,int width,double posx,double posy) {
 		uri = file.toURI().toString();
 		ImageView imageview = new ImageView(uri);
-		imageview.setFitWidth(width);
+		if (nave==0 || nave == 3) {
+			imageview.setFitWidth(width);
+		}else {
+			imageview.setFitHeight(width);
+		}
 		imageview.setTranslateX(posx);
 		imageview.setTranslateY(posy);
 		imageview.setPreserveRatio(true);
@@ -106,28 +109,28 @@ public class SuperShip{
 	Circle boundObj(int width,double posx,double posy) {
 		Circle cir = new Circle(width/2);
 		cir.setFill(null);
-		cir.setStroke(Color.TRANSPARENT);
+		cir.setStroke(Color.RED);
 		cir.setTranslateX(posx);
 		cir.setTranslateY(posy);
 		return cir;
 	}
-	int constant = 15;
+	int constant = 10;
 	void move(int pos) {
 		if (pos==0) {
 			ship1.setTranslateY(ship1.getTranslateY()+constant);
-			circle.setTranslateY(ship1.getTranslateY()+constant);
+			circle.setTranslateY(circle.getTranslateY()+constant);
 		}
 		if (pos==1) {
 			ship1.setTranslateY(ship1.getTranslateY()-constant);
-			circle.setTranslateY(ship1.getTranslateY()-constant);
+			circle.setTranslateY(circle.getTranslateY()-constant);
 		}
 		if (pos==2) {
 			ship1.setTranslateX(ship1.getTranslateX()-constant);
-			circle.setTranslateX(ship1.getTranslateX()-constant);
+			circle.setTranslateX(circle.getTranslateX()-constant);
 		}
 		if (pos==3) {
 			ship1.setTranslateX(ship1.getTranslateX()+constant);
-			circle.setTranslateX(ship1.getTranslateX()+constant);
+			circle.setTranslateX(circle.getTranslateX()+constant);
 		}
 	}
 }

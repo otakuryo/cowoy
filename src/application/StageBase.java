@@ -75,25 +75,46 @@ public class StageBase  extends Application {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.getCode() ==  KeyCode.KP_DOWN) {
-	            	superShip.move(0);
-				}
-				if (event.getCode() ==  KeyCode.KP_UP) {	
+				switch (event.getCode()) {
+				case UP:
 	            	superShip.move(1);
+					break;
+				case DOWN:
+	            	superShip.move(0);
+					break;
+				case LEFT:
+	            	superShip.move(2);
+					break;
+				case RIGHT:
+	            	superShip.move(3);
+					break;
+				default:
+					break;
 				}
 			}
 		});
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.getCode() ==  KeyCode.LEFT) {
+				switch (event.getCode()) {
+				case UP:
+	            	superShip.move(1);
+					break;
+				case DOWN:
+	            	superShip.move(0);
+					break;
+				case LEFT:
 	            	superShip.move(2);
-				}
-				if (event.getCode() ==  KeyCode.RIGHT) {	
+					break;
+				case RIGHT:
 	            	superShip.move(3);
+					break;
+				default:
+					break;
 				}
 			}
 		});
+		
 		//añadimos al grupo principal los grupos hijos
 		root.getChildren().add(stageFondoG);
 		root.getChildren().add(statusG);
@@ -103,7 +124,7 @@ public class StageBase  extends Application {
 		//instanciamos el meteoro
 		rocks = new ArrayList<>();
 		int count=vel*2;
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < 1; i++) {
 			rocks.add(new RockA(vel*3,"src/img/rock1.png"));
 			rocks.get(i).createObj();
 			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock());
