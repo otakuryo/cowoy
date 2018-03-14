@@ -4,9 +4,13 @@ import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class StageBase  extends Application {
@@ -25,7 +29,7 @@ public class StageBase  extends Application {
 	StatusBar statusBar;
 	StageFondo stageFondo;
 	SuperShip superShip;
-	RockA rockA,rockB;
+	RockA itemScore;
 	ArrayList<RockA> rocks;
 	
 	//reloj
@@ -57,7 +61,7 @@ public class StageBase  extends Application {
 		//instanciamos la clase del statusbar
 		statusBar = new StatusBar(lvl,character);
 		statusG = statusBar.start(primaryStage);
-		superShip = new SuperShip(scene);
+		superShip = new SuperShip(scene,ship);
 		timer(primaryStage);
 		
 		//instanciamos la clase del fondo
@@ -66,7 +70,30 @@ public class StageBase  extends Application {
 		
 		//instanciamos la nave
 		superShip.createShip();
+		//funcion de teclas :)
 		
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() ==  KeyCode.KP_DOWN) {
+	            	superShip.move(0);
+				}
+				if (event.getCode() ==  KeyCode.KP_UP) {	
+	            	superShip.move(1);
+				}
+			}
+		});
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() ==  KeyCode.LEFT) {
+	            	superShip.move(2);
+				}
+				if (event.getCode() ==  KeyCode.RIGHT) {	
+	            	superShip.move(3);
+				}
+			}
+		});
 		//añadimos al grupo principal los grupos hijos
 		root.getChildren().add(stageFondoG);
 		root.getChildren().add(statusG);
@@ -77,10 +104,14 @@ public class StageBase  extends Application {
 		rocks = new ArrayList<>();
 		int count=vel*2;
 		for (int i = 0; i < count; i++) {
-			rocks.add(new RockA(vel*3));
+			rocks.add(new RockA(vel*3,"src/img/rock1.png"));
 			rocks.get(i).createObj();
 			root.getChildren().addAll(rocks.get(i).getRocks(),rocks.get(i).getBondRock());
 		}
+		//instanciamos el objeto extra :)
+		itemScore=new RockA(vel*3, "src/img/photo.jpg");
+		itemScore.createObj();
+		root.getChildren().addAll(itemScore.getRocks(),itemScore.getBondRock());
 		
 		//mostramos la escena con todos los grupos
 		scene.setCursor(Cursor.NONE); // para ocultar el mouse
@@ -107,9 +138,13 @@ public class StageBase  extends Application {
 	            	stageFondo.moveBackground(); // mueve el fondo de pantalla
 	            	for (int i = 0; i < rocks.size(); i++) {
 	            		rocks.get(i).move(); // mueve las rocas :)
+	            		itemScore.move(); // mueve el item extra :)
 	            		if(rocks.get(i).searchCollision(superShip.getCircle())) {
 	            			pause = true;
 	            		}
+	            		if (itemScore.searchCollision(superShip.getCircle())) {
+							score++;
+						}
 					}
 	            	
 	            	if(frameCount%60==0) {
@@ -122,6 +157,7 @@ public class StageBase  extends Application {
 								vel+=1;
 								rocks.get(j).setVel(vel);
 							}
+							itemScore.setVel(vel/2);
 						}
 	            		if (frameCount%3600==0) {
 	            			sec=0;

@@ -10,6 +10,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class MenuP{
@@ -56,7 +58,7 @@ public class MenuP{
 		//creamos la pantalla y definimos el tamaño	
         Group rootg = new Group(background,spike,faye,jet,francoise);
         Scene sceneg = new Scene(rootg, WITH, HEIGHT);
-		
+        
 		//asignamos la escena a primaryStage
 		primaryStage.setResizable(false);
         //primaryStage.setScene(scene);
@@ -125,4 +127,6 @@ public class MenuP{
 		selectItem(img,selection,primaryStage);
 		return img;
 	}
+	
+	
 }

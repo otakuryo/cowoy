@@ -2,8 +2,11 @@ package application;
 
 import java.io.File;
 
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -26,8 +29,26 @@ public class SuperShip{
 	
 	//escenario
 	Scene scene;
-	public SuperShip(Scene scene) {
+	public SuperShip(Scene scene,int nave) {
 		this.scene = scene;
+		switch (nave) {
+		case 0:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		case 1:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		case 2:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		case 3:
+			pathFile="src/img/SwordfishII.png";
+			break;
+
+		default:
+			pathFile="src/img/SwordfishII.png";
+			break;
+		}
 	}
 	
 	public ImageView getShip1() {
@@ -90,6 +111,23 @@ public class SuperShip{
 		cir.setTranslateY(posy);
 		return cir;
 	}
-	
-	
+	int constant = 15;
+	void move(int pos) {
+		if (pos==0) {
+			ship1.setTranslateY(ship1.getTranslateY()+constant);
+			circle.setTranslateY(ship1.getTranslateY()+constant);
+		}
+		if (pos==1) {
+			ship1.setTranslateY(ship1.getTranslateY()-constant);
+			circle.setTranslateY(ship1.getTranslateY()-constant);
+		}
+		if (pos==2) {
+			ship1.setTranslateX(ship1.getTranslateX()-constant);
+			circle.setTranslateX(ship1.getTranslateX()-constant);
+		}
+		if (pos==3) {
+			ship1.setTranslateX(ship1.getTranslateX()+constant);
+			circle.setTranslateX(ship1.getTranslateX()+constant);
+		}
+	}
 }
