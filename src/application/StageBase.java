@@ -3,11 +3,13 @@ package application;
 import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class StageBase  extends Application {
 	//parametros de la ventana
@@ -38,6 +40,7 @@ public class StageBase  extends Application {
     String lvl,character;
     int ship=3;
     int vel=2;
+	int score = 0;
     
     public StageBase() {}
     
@@ -101,7 +104,14 @@ public class StageBase  extends Application {
 		sec=0;
 		min=0;
 	}
-	int score = 0;
+	void movExit() {
+		FadeTransition ft = new FadeTransition(Duration.millis(2000),root);
+		ft.setFromValue(1.0);
+		ft.setToValue(0.0);
+		ft.play();
+	}
+	
+	//todo el movimiento se encuentra aqui, solo hay 2 timers para todo el proyecto :)
 	void timer(Stage primary) {
 		//reloj
 	    timer = new AnimationTimer() {
@@ -116,7 +126,9 @@ public class StageBase  extends Application {
 	            		rocks.get(i).move(); // mueve las rocas :)
 	            		itemScore.move(); // mueve el item extra :)
 	            		if(rocks.get(i).searchCollision(superShip.getCircle())) {
-	            			pause = true;
+	            			pause = true; //pausamos todos los metodos del stage
+	            			movExit(); //creamos un tipo de fade out
+		        			reset(); // y se ponen los valores a 0
 	            		}
 	            		if (itemScore.searchCollision(superShip.getCircle())) {
 							score++;
@@ -145,12 +157,12 @@ public class StageBase  extends Application {
 	            	statusBar.setTexts(String.format("%05d$",score),2);
 					
 				}else {
-					DeathScreen ds = new DeathScreen(); //crea la pantalla de la muerte
-					try {ds.start(primary,score,character);} catch (Exception e) {e.printStackTrace();}
-        			timer.stop(); //se para el contador
-        			//root.getChildren().add(ds.getBackground());
-					root.getChildren().clear(); // se limpia el escenario
-        			reset(); // y se ponen los valores a 0
+					if (frameCount>60) {
+						DeathScreen ds = new DeathScreen(); //crea la pantalla de la muerte					
+						try {ds.start(primary,score,character);} catch (Exception e) {e.printStackTrace();}
+	        			timer.stop(); //se para el contador
+						root.getChildren().clear(); // se limpia el escenario
+					}
 				}
             }
         };

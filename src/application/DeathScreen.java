@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -10,12 +11,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class DeathScreen{
 	//parametros de la ventana	
 	int WITH = Pref.getWITH();
 	int HEIGHT = Pref.getHEIGHT();
-
+	
+	Group root;
+	Scene scene;
+	
 	private ImageView background;
 	private Text scoreTxt;
 	private String MEDIA_URL_IMG,MEDIA_FILE = "src/img/death.png";
@@ -28,18 +33,16 @@ public class DeathScreen{
 		timer(primaryStage);
 		backSet();
 		setScore(score,pilot);
-		Group root = new Group();
-		Scene scene = new Scene(root,WITH,HEIGHT);
+		root = new Group();
+		scene = new Scene(root,WITH,HEIGHT);
 		root.getChildren().add(background);
 		root.getChildren().add(scoreTxt);
 		primaryStage.setScene(scene);
-		primaryStage.show();
+		//primaryStage.show();
 		return false;
 		
 	}
 	public void backSet() {
-		// TODO Auto-generated method stub
-
 		File file = new File(MEDIA_FILE);
 		MEDIA_URL_IMG = file.toURI().toString();
 		background=new ImageView(MEDIA_URL_IMG);
@@ -69,7 +72,7 @@ public class DeathScreen{
 				frameCount++;
             	if(frameCount%60==0) {
             		sec++;
-            		if (sec > 3) {
+            		if (sec > 5) {
             			timer.stop();
 						pause = true;
 						MenuP menuP = new MenuP();
