@@ -38,7 +38,7 @@ public class StageBase  extends Application {
     
     //parametros de juego
     String lvl,character;
-    int ship=3;
+    int ship=1;
     int vel=2;
 	int score = 0;
     

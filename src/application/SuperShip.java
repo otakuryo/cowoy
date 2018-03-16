@@ -4,6 +4,7 @@ import java.io.File;
 
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -17,10 +18,10 @@ public class SuperShip{
 	
 	//parametros nave
 	File file;
-	String uri,pathFile="src/img/SwordfishII.png";
+	Image[] img = new Image[3];
 	ImageView ship1;
 	Circle circle;
-	int nave;
+	int nave=1;
 	int widthShip = 120;
 	int posxShip = 0;
 	int posyShip = 300;
@@ -40,13 +41,6 @@ public class SuperShip{
 	public SuperShip(Scene scene,int nave) {
 		this.scene = scene;
 		this.nave = nave;
-		switch (nave) {
-		case 0:pathFile="src/img/SwordfishII.png";break;
-		case 1:pathFile="src/img/Faye.png";break;
-		case 2:pathFile="src/img/Jet.png";break;
-		case 3:pathFile="src/img/Ein.png";break;
-
-		default:pathFile="src/img/SwordfishII.png";break;}
 		posMoveKey();
 	}
 	
@@ -62,10 +56,10 @@ public class SuperShip{
 	public Scene getScene() {
 		return scene;
 	}
+	/*
 	public void setPathFile(String pathFile) {
 		this.pathFile = pathFile;
 	}
-	/*
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		root = new Group();
@@ -79,8 +73,9 @@ public class SuperShip{
 	}
 	*/
 	void createShip() {
+		createImg();
 		//creamos el objeto
-		ship1 = createObj(new File(pathFile), widthShip+5, posxShip, posyShip);
+		ship1 = createObj(widthShip+5, posxShip, posyShip);
 		circle = boundObj(widthShip, posyCir+(widthShip/2), posxCir+(widthShip/2)); //le añadimos la mitad del ancho para que en el inicio se coloque correctamente
 		scene.setOnMouseMoved((MouseEvent me) -> {
             ship1.setTranslateX(me.getX()-widthShip/2);
@@ -92,9 +87,10 @@ public class SuperShip{
         });
 	}
 	
-	ImageView createObj(File file,int width,double posx,double posy) {
-		uri = file.toURI().toString();
-		ImageView imageview = new ImageView(uri);
+	//metodo para crear naves :)
+	ImageView createObj(int width,double posx,double posy) {
+		//uri = file.toURI().toString();
+		ImageView imageview = new ImageView(img[1]);
 		if (nave==0 || nave == 3) {
 			imageview.setFitWidth(width);
 		}else {
@@ -104,6 +100,32 @@ public class SuperShip{
 		imageview.setTranslateY(posy);
 		imageview.setPreserveRatio(true);
 		return imageview;
+	}
+	//Se selecciona la imagen para el tipo de imagen
+	void createImg() {
+		File[] fil = new File[3];
+		
+		if (nave==0) {
+			fil[0] = new File("src/img/SwordfishII.png");
+			fil[1] = new File("src/img/SwordfishII.png");
+			fil[2] = new File("src/img/SwordfishII.png");
+		}else if(nave==1) {
+			fil[0] = new File("src/img/Faye0.png");
+			fil[1] = new File("src/img/Faye1.png");
+			fil[2] = new File("src/img/Faye2.png");
+		}else if(nave==2) {
+			fil[0] = new File("src/img/jet0.png");
+			fil[1] = new File("src/img/jet1.png");
+			fil[2] = new File("src/img/jet2.png");
+		}else if(nave==3) {
+			fil[0] = new File("src/img/Ein.png");
+			fil[1] = new File("src/img/Ein.png");
+			fil[2] = new File("src/img/Ein.png");
+		}
+		for (int i = 0; i < fil.length; i++) {
+			img[i] = new Image(fil[i].toURI().toString());
+		}
+		
 	}
 	//cuerpo de campo de colision
 	Circle boundObj(int width,double posx,double posy) {
@@ -124,6 +146,9 @@ public class SuperShip{
 		if (moveDOWN && ship1.getTranslateY()<(HEIGHT-widthShip)) {
 			ship1.setTranslateY(ship1.getTranslateY()+constant);
 			circle.setTranslateY(circle.getTranslateY()+constant);
+			if (moveDOWN) {
+				
+			}
 		}
 		if (moveUP && ship1.getTranslateY()>2) {
 			ship1.setTranslateY(ship1.getTranslateY()-constant);
