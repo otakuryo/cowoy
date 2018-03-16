@@ -59,20 +59,33 @@ public class ServidorUDP{
         // Leemos una petición del DatagramSocket
         socketUDP.receive(peticion);
 
-        final ByteArrayInputStream baos = new ByteArrayInputStream(peticion.getData());
-        final ObjectInputStream oos = new ObjectInputStream(baos);
-        scorePlayer = (ScorePlayer) oos.readObject();
-        scoreStr.add(scorePlayer);
-        
-        System.out.print("Datagrama recibido del host: " +peticion.getAddress());
-        System.out.println(" con texto: " + scorePlayer.getName());
-        //formatText(new String(peticion.getData()));
-        
-        // Construimos el DatagramPacket para enviar la respuesta
-        DatagramPacket respuesta = new DatagramPacket(peticion.getData(), peticion.getLength(), peticion.getAddress(), peticion.getPort());
+        if (new String(peticion.getData()).equals("retrive")) {
 
-        // Enviamos la respuesta, que es un eco
-        socketUDP.send(respuesta);
-        System.out.println(scoreStr.size());
+		    final ByteArrayInputStream baos = new ByteArrayInputStream(peticion.getData());
+		    final ObjectInputStream oos = new ObjectInputStream(baos);
+		    scorePlayer = (ScorePlayer) oos.readObject();
+		    scoreStr.add(scorePlayer);
+		    
+		    System.out.print("Usuario: " +String.format("%05d$",score));
+		    System.out.println(" con puntaje: " + scorePlayer.getScore());
+		    //formatText(new String(peticion.getData()));
+		    
+		    // Construimos el DatagramPacket para enviar la respuesta
+		    DatagramPacket respuesta = new DatagramPacket(peticion.getData(), peticion.getLength(), peticion.getAddress(), peticion.getPort());
+		
+		    // Enviamos la respuesta, que es un eco
+		    socketUDP.send(respuesta);
+		    System.out.println(scoreStr.size());
+		    
+		}else {
+		    final ByteArrayInputStream baos = new ByteArrayInputStream(peticion.getData());
+		    final ObjectInputStream oos = new ObjectInputStream(baos);
+		    scorePlayer = (ScorePlayer) oos.readObject();
+		    scoreStr.add(scorePlayer);
+		    
+		    System.out.print("Datagrama recibido del host: " +peticion.getAddress());
+		    System.out.println(" con texto: " + scorePlayer.getName());
+		    //formatText(new String(peticion.getData()));
+		}
 	}
 }

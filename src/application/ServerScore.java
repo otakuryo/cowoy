@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import scorePackUDP.ScorePlayer;
 import scorePackUDP.ServidorUDP;
+import scorePackUDP.ServidorUDPB;
 
 public class ServerScore extends Application{
 	Group group;
@@ -34,7 +35,7 @@ public class ServerScore extends Application{
 	ArrayList<Text> textScore = new ArrayList<>();
 	ArrayList<ScorePlayer> scoreStr = new ArrayList<>();
 	private AnimationTimer timer;
-	private ServidorUDP servidorUDP;
+	private ServidorUDPB servidorUDP;
 	
     static int puertoServidor = 6789;
 	static String ip ="127.0.0.1";
@@ -51,6 +52,7 @@ public class ServerScore extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
+		servidorUDP = new ServidorUDPB();
 		timer();
 		group = new Group();
 		scene = new Scene(group,WITH,HEIGHT);
@@ -58,7 +60,14 @@ public class ServerScore extends Application{
 		background = new Rectangle(WITH,HEIGHT,Color.BLACK);
 		group.getChildren().add(background);
 		group.getChildren().add(addText1());
-		//ServidorUDP.start();
+		Runnable run =new Runnable() {
+			
+			@Override
+			public void run() {			
+			}
+		};
+		run.run();
+		servidorUDP.newThread(run);
 				
 		/*for (int i = 1; i < scoreStr.size(); i++) {
 			textScore.add(addText2(scoreStr.get(i).getName(), scoreStr.get(i).getScore(),i*52));
@@ -92,7 +101,7 @@ public class ServerScore extends Application{
 	}
 	void retriveData() {
 		scoreStr.clear();
-		scoreStr.addAll(ServidorUDP.getScoreStr());
+		scoreStr.addAll(servidorUDP.getScoreStr());
 		//scoreStr = ServidorUDP.getScoreStr();
 		System.out.println(scoreStr.size());
 
