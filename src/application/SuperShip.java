@@ -77,14 +77,26 @@ public class SuperShip{
 		//creamos el objeto
 		ship1 = createObj(widthShip+5, posxShip, posyShip);
 		circle = boundObj(widthShip, posyCir+(widthShip/2), posxCir+(widthShip/2)); //le añadimos la mitad del ancho para que en el inicio se coloque correctamente
+		
+		//añadimos un listener al puntero, para mover la nave
 		scene.setOnMouseMoved((MouseEvent me) -> {
-            ship1.setTranslateX(me.getX()-widthShip/2);
+			movMouseShip(me);
+			ship1.setTranslateX(me.getX()-widthShip/2);
             ship1.setTranslateY(me.getY()-widthShip/2);
 
             circle.setTranslateX(me.getX());
             circle.setTranslateY(me.getY());
             
         });
+	}
+	
+	//este metodo cambia la posicion de la navve con respecto al mouse :)
+	void movMouseShip(MouseEvent me) {
+		if (me.getY()>(ship1.getTranslateY()+widthShip/2)) {
+			ship1.setImage(img[2]);
+		}else if(me.getY()<(ship1.getTranslateY()+widthShip/2)) {
+			ship1.setImage(img[0]);
+		}
 	}
 	
 	//metodo para crear naves :)
@@ -134,7 +146,7 @@ public class SuperShip{
 		if (nave == 3) {
 			cir.setStroke(Color.AQUA);
 		}else {
-			cir.setStroke(Color.TRANSPARENT);
+			cir.setStroke(Color.AQUA);
 		}
 		cir.setTranslateX(posx);
 		cir.setTranslateY(posy);
@@ -146,21 +158,26 @@ public class SuperShip{
 		if (moveDOWN && ship1.getTranslateY()<(HEIGHT-widthShip)) {
 			ship1.setTranslateY(ship1.getTranslateY()+constant);
 			circle.setTranslateY(circle.getTranslateY()+constant);
-			if (moveDOWN) {
-				
-			}
+			ship1.setImage(img[2]);
 		}
 		if (moveUP && ship1.getTranslateY()>2) {
 			ship1.setTranslateY(ship1.getTranslateY()-constant);
 			circle.setTranslateY(circle.getTranslateY()-constant);
+			ship1.setImage(img[0]);
 		}
 		if (moveLEFT && ship1.getTranslateX()>2) {
 			ship1.setTranslateX(ship1.getTranslateX()-constant);
 			circle.setTranslateX(circle.getTranslateX()-constant);
+			if (!moveDOWN && !moveUP) {
+				ship1.setImage(img[1]);	 
+			}
 		}
 		if (moveRIGHT && ship1.getTranslateX()<(WITH-widthShip)) {
 			ship1.setTranslateX(ship1.getTranslateX()+constant);
 			circle.setTranslateX(circle.getTranslateX()+constant);
+			if (!moveDOWN && !moveUP) {
+				ship1.setImage(img[1]);	 
+			}
 		}
 	}
 	//funcion de teclas :)
