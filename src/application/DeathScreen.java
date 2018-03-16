@@ -12,6 +12,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import scorePackUDP.ClienteUDP;
+import scorePackUDP.ServidorUDP;
 
 public class DeathScreen{
 	//parametros de la ventana	
@@ -38,6 +40,8 @@ public class DeathScreen{
 		root.getChildren().add(background);
 		root.getChildren().add(scoreTxt);
 		primaryStage.setScene(scene);
+		ClienteUDP clienteUDP = new ClienteUDP(score, pilot, 0);
+		clienteUDP.sendData();
 		//primaryStage.show();
 		return false;
 		
