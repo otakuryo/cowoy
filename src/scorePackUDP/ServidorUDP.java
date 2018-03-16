@@ -3,12 +3,11 @@ package scorePackUDP;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.io.*;
 
 public class ServidorUDP{
 
+	//patron de diseño singlenton -> 
 	static HashMap<Integer, String> score;
 	final static ArrayList<ScorePlayer> scoreStr = new ArrayList<>();
 	static DatagramSocket socketUDP;
@@ -83,7 +82,7 @@ public class ServidorUDP{
 		    scorePlayer = (ScorePlayer) oos.readObject();
 		    scoreStr.add(scorePlayer);
 		    
-		    System.out.print("Datagrama recibido del host: " +peticion.getAddress());
+		    System.out.print("Datagrama:" +scorePlayer.getScore());
 		    System.out.println(" con texto: " + scorePlayer.getName());
 		    //formatText(new String(peticion.getData()));
 		}

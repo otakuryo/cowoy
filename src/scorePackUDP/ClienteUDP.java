@@ -11,7 +11,11 @@ public class ClienteUDP {
 	public ClienteUDP() {}
 	public ClienteUDP(int score, String name, int pilot) {
 		scorePlayer = new ScorePlayer(score, name, pilot);
-	}  
+	} 
+	public static void main(String[] args) {
+		ClienteUDP clienteUDP = new ClienteUDP(100, "opo", 0);
+		clienteUDP.sendData();
+	}
 
 	public void sendData() {
 	    try {
