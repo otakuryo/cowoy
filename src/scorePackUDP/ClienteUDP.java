@@ -1,10 +1,12 @@
 package scorePackUDP;
 
 import java.net.*;
+import java.util.ArrayList;
 import java.io.*;
 
 public class ClienteUDP {
 
+	static ArrayList<ScorePlayer> scoreStr = new ArrayList<>();
 	static ScorePlayer scorePlayer;
     static int puertoServidor = 6789;
 	static String ip ="127.0.0.1";
@@ -13,7 +15,18 @@ public class ClienteUDP {
 		scorePlayer = new ScorePlayer(score, name, pilot);
 	} 
 	public static void main(String[] args) {
-		ClienteUDP clienteUDP = new ClienteUDP(100, "opo", 0);
+		System.out.println("lol?");
+		ClienteUDP clienteUDP = new ClienteUDP(321, "rio", 0);
+		clienteUDP.sendData();
+		clienteUDP = new ClienteUDP(123, "ff", 0);
+		clienteUDP.sendData();
+		clienteUDP = new ClienteUDP(432, "ds", 0);
+		clienteUDP.sendData();
+		clienteUDP = new ClienteUDP(345, "sd", 0);
+		clienteUDP.sendData();
+		clienteUDP = new ClienteUDP(765, "hgf", 0);
+		clienteUDP.sendData();
+		clienteUDP = new ClienteUDP(678, "jhjj", 0);
 		clienteUDP.sendData();
 	}
 
@@ -42,6 +55,43 @@ public class ClienteUDP {
 	    } catch (IOException e) {
 	      System.out.println("IO: " + e);
 	    }
+	}
+	
+	public ArrayList<ScorePlayer> retriveData() throws ClassNotFoundException {
+	    try {
+	    	String texto="retrive";
+	    	DatagramSocket socketUDP = new DatagramSocket();
+
+	    	byte[] item = texto.getBytes();
+	    	InetAddress hostServidor = InetAddress.getByName(ip);
+
+	    	// Construimos un datagrama para enviar el mensaje al servidor
+	    	DatagramPacket peticion2 = new DatagramPacket(item, item.length, hostServidor,puertoServidor);
+	      
+	    	//enviamos el datagrama
+	    	socketUDP.send(peticion2);
+	      
+	    	// Construimos el DatagramPacket que contendra la respuesta
+	    	byte[] bufer = new byte[2000];
+	    	DatagramPacket respuesta = new DatagramPacket(bufer, bufer.length);
+	      
+	    	socketUDP.receive(respuesta);
+
+	    	// Recibimos la respuesta del servidor
+	    	final ByteArrayInputStream baos = new ByteArrayInputStream(respuesta.getData());
+	    	final ObjectInputStream oos = new ObjectInputStream(baos);
+	    	scoreStr = (ArrayList<ScorePlayer>) oos.readObject();
+	    	System.out.println("en total ahora"+scoreStr.size());
+		    
+	    	// Cerramos el socket
+	    	socketUDP.close();
+
+	    } catch (SocketException e) {
+	      System.out.println("Socket: " + e.getMessage());
+	    } catch (IOException e) {
+	      System.out.println("IO: " + e);
+	    }
+		return scoreStr;
 	}
   // Los argumentos proporcionan el mensaje y el nombre del servidor
   

@@ -1,32 +1,23 @@
 package scorePackUDP;
 
-import java.awt.List;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import application.Pref;
 import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import scorePackUDP.ScorePlayer;
-import scorePackUDP.ServidorUDP;
-import scorePackUDP.ServidorUDPB;
 
+//Cuidado con iniciar primero esto... necesita el servidor o se cuelga el proceso :(
 public class ServerScore extends Application{
 	Group group;
 	Scene scene;
@@ -36,6 +27,7 @@ public class ServerScore extends Application{
 	ArrayList<Text> textScore = new ArrayList<>();
 	ArrayList<ScorePlayer> scoreStr = new ArrayList<>();
 	private AnimationTimer timer;
+	ClienteUDP cUDP = new ClienteUDP();
 	//private ServidorUDP servidorUDP;
 	
     static int puertoServidor = 6789;
@@ -56,16 +48,15 @@ public class ServerScore extends Application{
 		timer();
 		group = new Group();
 		scene = new Scene(group,WITH,HEIGHT);
-
+		
 		background = new Rectangle(WITH,HEIGHT,Color.BLACK);
 		group.getChildren().add(background);
 		group.getChildren().add(addText1());
-				
-		/*for (int i = 1; i < scoreStr.size(); i++) {
-			textScore.add(addText2(scoreStr.get(i).getName(), scoreStr.get(i).getScore(),i*52));
+		
+		for (int i = 1; i < 11; i++) {
+			textScore.add(addFieldScore("AAA", 9999,i*52));
 			group.getChildren().add(textScore.get(i-1));
-		}*/
-
+		}
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -81,9 +72,9 @@ public class ServerScore extends Application{
 		text.setTranslateY((HEIGHT/2)-250);
 		return text;
 	}
-	Text addText2(String name,int score,int sumPosY) {
+	Text addFieldScore(String name,int score,int sumPosY) {
 		Text text = new Text();
-		text.setText(String.format("%05d$ %5s",score,name));
+		text.setText(String.format("%05d$ %-5s",score,name));
 		text.setTextAlignment(TextAlignment.CENTER);
 		text.setFill(Color.WHITE);
 		text.setStyle("-fx-font: 52 arial;");
@@ -92,30 +83,54 @@ public class ServerScore extends Application{
 		text.setTranslateY((HEIGHT/2)-250+sumPosY);
 		return text;
 	}
-	void retriveData() {
+	
+	//con este metodo pediremos la informacion al servidor, pasaremos por la clase clienteUdp :)
+	//que nos entregara los datos en un array
+	void retriveData() throws ClassNotFoundException {
+		System.out.println("now: "+scoreStr.size());
+		scoreStr.addAll(cUDP.retriveData());
+		//for (int i = 0; i < scoreStr.size(); i++) {System.out.println(i+"recibido: "+scoreStr.size());}
+		orderData();
+	}
+	
+	//ahora procederemos a ordenar los datos y posteriormente, a dejar solo los primero 10
+	void orderData() {
+		//creamos y guardamos una arraylist
+		ArrayList<ScorePlayer> scoreTemp = new ArrayList<>();
+		scoreTemp.addAll(scoreStr);
 		scoreStr.clear();
-		scoreStr.addAll(ServidorUDP.getScoreStr());
-		//scoreStr = ServidorUDP.getScoreStr();
-		System.out.println(scoreStr.size());
-
-		for (int i = 1; i < scoreStr.size(); i++) {
-			textScore.add(addText2(scoreStr.get(i).getName(), scoreStr.get(i).getScore(),i*52));
-			group.getChildren().add(textScore.get(i-1));
+		List<Integer> tempList = new ArrayList<>();
+		for (int i = 0; i < scoreTemp.size(); i++) {
+			tempList.add(scoreTemp.get(i).getScore());
 		}
+		Collections.sort(tempList,Collections.reverseOrder());
+		for(int i=0; i<tempList.size() && i<10;i++ )
+        {
+			for (int j = 0; j < scoreTemp.size(); j++) {
+				if (tempList.get(i)==scoreTemp.get(j).getScore()) {
+					scoreStr.add(scoreTemp.get(j));
+					scoreTemp.remove(j);
+					j--;
+				}
+			}
+			textScore.get(i).setText(String.format("%05d$ %-5s",scoreStr.get(i).getScore(),scoreStr.get(i).getName().toUpperCase()));
+        }
 	}
 
 	private int fragment=0;
 	void timer() {
 		//reloj
 	    timer = new AnimationTimer() {
-
 			@Override
             public void handle(long l) {
 				fragment++;
 				if (fragment%300==0) {
-					
 					System.out.println("buscando...");
-					retriveData();
+					try {
+						retriveData();
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 	    };
