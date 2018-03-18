@@ -2,6 +2,7 @@ package application;
 
 import java.util.ArrayList;
 
+import config.Pref;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -10,6 +11,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import models.RockA;
+import models.SuperShip;
+import views.DeathScreen;
+import views.StageFondo;
+import views.StatusBar;
 
 public class StageBase  extends Application {
 	//parametros de la ventana

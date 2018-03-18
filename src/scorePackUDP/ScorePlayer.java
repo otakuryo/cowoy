@@ -2,6 +2,7 @@ package scorePackUDP;
 
 import java.io.Serializable;
 
+//Se crea la plantilla para guardar el score del jugador :) 
 public class ScorePlayer implements Serializable {
 	//necesita ser serializable por que sino da un error de io
 	private static final long serialVersionUID = 1L;
@@ -21,9 +22,5 @@ public class ScorePlayer implements Serializable {
 	}
 	public int getScore() {
 		return score;
-	}
-	public String getFormatPlayer() {
-		String t= String.format("%05d$ %5s",score,name);
-		return t;
 	}
 }

@@ -32,6 +32,7 @@ public class ClienteUDP {
 
 	public void sendData() {
 	    try {
+	      //transaformamos la clase en bytes 
 	      DatagramSocket socketUDP = new DatagramSocket();
 
 	      final ByteArrayOutputStream baos = new ByteArrayOutputStream(200);
@@ -39,6 +40,7 @@ public class ClienteUDP {
 	      oos.writeObject(scorePlayer);
 	      final byte[] data = baos.toByteArray();
 	      
+	      //transformamos la ip dada, en una ip que el datagram pueda manejar
 	      InetAddress hostServidor = InetAddress.getByName(ip);
 
 	      // Construimos un datagrama para enviar el mensaje al servidor
@@ -57,6 +59,7 @@ public class ClienteUDP {
 	    }
 	}
 	
+	//este metodo enviara un retrive al servidor, que este lo reconocera y respondera con la lista de scores :)
 	public ArrayList<ScorePlayer> retriveData() throws ClassNotFoundException {
 	    try {
 	    	String texto="retrive";
@@ -92,7 +95,5 @@ public class ClienteUDP {
 	      System.out.println("IO: " + e);
 	    }
 		return scoreStr;
-	}
-  // Los argumentos proporcionan el mensaje y el nombre del servidor
-  
+	}  
 }

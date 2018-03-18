@@ -1,11 +1,10 @@
 package scorePackUDP;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import application.Pref;
+import config.Pref;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -28,15 +27,10 @@ public class ServerScore extends Application{
 	ArrayList<ScorePlayer> scoreStr = new ArrayList<>();
 	private AnimationTimer timer;
 	ClienteUDP cUDP = new ClienteUDP();
-	//private ServidorUDP servidorUDP;
 	
+	//Se configura el puerto e ip de donde recogera los datos, por defecto lo dejamos asi :)
     static int puertoServidor = 6789;
 	static String ip ="127.0.0.1";
-	
-	//realizar un hashmap<score, Text>
-	//pasarlo a un list los keys
-	//ordenar con un collections.list
-	
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -44,23 +38,30 @@ public class ServerScore extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		//iniciamos un temporizador, igual al de todas las clases (preferencias personales)
 		timer();
+		
+		//se crea los grupos y el escenario
 		group = new Group();
 		scene = new Scene(group,WITH,HEIGHT);
 		
+		//añadimos los objetos al grupo
 		background = new Rectangle(WITH,HEIGHT,Color.BLACK);
 		group.getChildren().add(background);
 		group.getChildren().add(addText1());
 		
+		//creamos los puestos de las primeras 10 personas
 		for (int i = 1; i < 11; i++) {
 			textScore.add(addFieldScore("AAA", 9999,i*52));
 			group.getChildren().add(textScore.get(i-1));
 		}
+		
+		//se abre el telon ;)
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 	
+	//este primer texto es el tutulo SCORE
 	Text addText1() {
 		Text text = new Text();
 		text.setText("Score");
@@ -68,10 +69,13 @@ public class ServerScore extends Application{
 		text.setFill(Color.GREY);
 		text.setStyle("-fx-font: 62 arial;");
 		text.setTranslateX(0);
-		text.setWrappingWidth(WITH);
+		//con este parametro tomara el ancho maximo de la pantalla, para que se centre el texto correctamente :)
+		text.setWrappingWidth(WITH); 
 		text.setTranslateY((HEIGHT/2)-250);
 		return text;
 	}
+	
+	//este es la lista de datos :) (solo seran 10)
 	Text addFieldScore(String name,int score,int sumPosY) {
 		Text text = new Text();
 		text.setText(String.format("%05d$ %-5s",score,name));
@@ -79,6 +83,7 @@ public class ServerScore extends Application{
 		text.setFill(Color.WHITE);
 		text.setStyle("-fx-font: 52 arial;");
 		text.setTranslateX(0);
+		//con este parametro tomara el ancho maximo de la pantalla, para que se centre el texto correctamente :)
 		text.setWrappingWidth(WITH);
 		text.setTranslateY((HEIGHT/2)-250+sumPosY);
 		return text;
@@ -89,7 +94,6 @@ public class ServerScore extends Application{
 	void retriveData() throws ClassNotFoundException {
 		System.out.println("now: "+scoreStr.size());
 		scoreStr.addAll(cUDP.retriveData());
-		//for (int i = 0; i < scoreStr.size(); i++) {System.out.println(i+"recibido: "+scoreStr.size());}
 		orderData();
 	}
 	
@@ -98,12 +102,18 @@ public class ServerScore extends Application{
 		//creamos y guardamos una arraylist
 		ArrayList<ScorePlayer> scoreTemp = new ArrayList<>();
 		scoreTemp.addAll(scoreStr);
-		scoreStr.clear();
-		List<Integer> tempList = new ArrayList<>();
+		scoreStr.clear(); //limpiamos el arraylist principal
+		List<Integer> tempList = new ArrayList<>(); //creamos una lista donde ira el score
+		
+		//añadimos el score de cada usuario
 		for (int i = 0; i < scoreTemp.size(); i++) {
 			tempList.add(scoreTemp.get(i).getScore());
 		}
+		//ordenamos descendientemente 
 		Collections.sort(tempList,Collections.reverseOrder());
+		
+		//lo añadimos al arraylist principal, al mismo tiempo lo mostramos en pantalla y eliminamos la de la
+		//lista segundaria
 		for(int i=0; i<tempList.size() && i<10;i++ )
         {
 			for (int j = 0; j < scoreTemp.size(); j++) {

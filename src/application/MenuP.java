@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.util.ArrayList;
 
+import config.Pref;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -10,8 +11,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class MenuP{
@@ -49,7 +48,8 @@ public class MenuP{
 		background=new ImageView(MEDIA_URL_IMG.get(0));
 		background.setFitHeight(778); // no se porque se come 10 puntos al realizar set resizable :(
 		background.setPreserveRatio(true);
-		   
+		
+		//creamos las imagenes que ocultaran al personaje...
 		spike=createImage(MEDIA_URL_IMG.get(1),166,61,253,0,primaryStage);
 		faye=createImage(MEDIA_URL_IMG.get(2),491,0,313,1,primaryStage);
 		jet=createImage(MEDIA_URL_IMG.get(3),262,461,316,2,primaryStage);
@@ -98,11 +98,14 @@ public class MenuP{
 					break;
 
 				default:
-					character = "ESPECIAL";
+					character = "ESPECIAL"; // .-.?
 					break;
 				}
+				
+				//envamos los datos al campo de batalla 
 				StageBase stageBase = new StageBase("1", selection, character);
-				//System.out.println("Seleccionaste a "+selection);
+				
+				//selecionamos la musica :D
 				try {
 					Video.setPlayerSound(selection);
 				} catch (Exception e) {}

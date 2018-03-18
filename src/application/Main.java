@@ -1,5 +1,6 @@
 package application;
 
+import config.Pref;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
@@ -28,10 +29,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
- 
-    /**
-     * Java main for when running without JavaFX launcher
-     */
+    
     public static void main(String[] args) {
         launch(args);
     }
