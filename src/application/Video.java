@@ -31,10 +31,12 @@ public class Video {
 	//creamos el reprductor de musica
 	static MediaPlayer playerSound;
 	MediaView mediaViewSound;
+	boolean showvid;
 	    
     public Video(StackPane root,Scene scene,boolean showVideo) {
 		this.root = root;
 		this.scene = scene;
+		showvid=showVideo;
 		//si el video no se reproduce...
 		if (!showVideo) {
 			file = new File("src/video/videoB.mp4");
@@ -63,7 +65,9 @@ public class Video {
         
         //creamos el reproductor del video
         MediaPlayer player = new MediaPlayer(new Media(MEDIA_URL));
-        player.setMute(true);
+        if (showvid) {
+            player.setMute(true);
+		}
         MediaView mediaView = new MediaView(player);
         mediaView.autosize();
         
@@ -82,15 +86,20 @@ public class Video {
         player.setOnEndOfMedia(new Runnable() {
             @Override
             public void run() {
+                if (!showvid) {
+                    playerSound.play();			
+        		}
             	player.stop();
-               MenuP menuP = new MenuP();
-               try {menuP.start(primaryStage);} catch (Exception e) {e.printStackTrace();}
+            	MenuP menuP = new MenuP();
+            	try {menuP.start(primaryStage);} catch (Exception e) {e.printStackTrace();}
             }
         });
         
         //lo reproducimos
         player.play();
-        playerSound.play();
+        if (showvid) {
+            playerSound.play();			
+		}
     }
     
     public static void setPlayerSound(int sound) {
