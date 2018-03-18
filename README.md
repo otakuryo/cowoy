@@ -1,2 +1,2 @@
 # Cowoy bebop by RYO
-probando JVAFX
+probando JAVAFX
