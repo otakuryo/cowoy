@@ -18,7 +18,7 @@ public class Video {
 
 	//Buscamos el VIDEO y lo convertimos en URI
 	private static File file = new File("src/video/video.mp4");
-	private static final String MEDIA_URL = file.toURI().toString();
+	private static String MEDIA_URL = file.toURI().toString();
 	
 	//Buscamos el AUDIO y lo convertimos en URI
 	private static ArrayList<File> fileSounds= new ArrayList<>();
@@ -31,13 +31,21 @@ public class Video {
 	//creamos el reprductor de musica
 	static MediaPlayer playerSound;
 	MediaView mediaViewSound;
-    
-    public Video(StackPane root,Scene scene) {
+	    
+    public Video(StackPane root,Scene scene,boolean showVideo) {
 		this.root = root;
 		this.scene = scene;
+		//si el video no se reproduce...
+		if (!showVideo) {
+			file = new File("src/video/videoB.mp4");
+			MEDIA_URL = file.toURI().toString();
+		}
+		
 	}
 
-    public void start(Stage primaryStage){
+	public void start(Stage primaryStage){
+		
+		
     	//agregamos la musica
     	fileSounds.add(new File("src/sounds/sound.m4a"));
     	fileSounds.add(new File("src/sounds/catsMars.mp3"));

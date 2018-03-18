@@ -34,6 +34,7 @@ public class MenuP{
 		return COWBOY;
 	}
 	public void start(Stage primaryStage) throws Exception {
+		System.out.println(Pref.getUser()+" - "+Pref.getIP());
 		//Buscamos la imagen y lo convertimos en URI
 	    fileImgs.add(new File("src/img/b0.png"));
 	    fileImgs.add(new File("src/img/Select_spike.png"));

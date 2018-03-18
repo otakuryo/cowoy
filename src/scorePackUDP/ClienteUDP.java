@@ -2,14 +2,17 @@ package scorePackUDP;
 
 import java.net.*;
 import java.util.ArrayList;
+
+import config.Pref;
+
 import java.io.*;
 
 public class ClienteUDP {
 
 	static ArrayList<ScorePlayer> scoreStr = new ArrayList<>();
 	static ScorePlayer scorePlayer;
-    static int puertoServidor = 6789;
-	static String ip ="127.0.0.1";
+    static int puertoServidor = Pref.getPort();
+	static String ip =Pref.getIP();
 	public ClienteUDP() {}
 	public ClienteUDP(int score, String name, int pilot) {
 		scorePlayer = new ScorePlayer(score, name, pilot);

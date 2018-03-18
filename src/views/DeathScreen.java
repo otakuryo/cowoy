@@ -33,13 +33,13 @@ public class DeathScreen{
 	public boolean start(Stage primaryStage,int score,String pilot) throws Exception {
 		timer(primaryStage);
 		backSet();
-		setScore(score,pilot);
+		setScore(score,Pref.getUser());
 		root = new Group();
 		scene = new Scene(root,WITH,HEIGHT);
 		root.getChildren().add(background);
 		root.getChildren().add(scoreTxt);
 		primaryStage.setScene(scene);
-		ClienteUDP clienteUDP = new ClienteUDP(score, pilot, 0);
+		ClienteUDP clienteUDP = new ClienteUDP(score, Pref.getUser(), 0);
 		clienteUDP.sendData();
 		//primaryStage.show();
 		return false;

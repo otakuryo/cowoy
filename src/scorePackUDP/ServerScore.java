@@ -29,8 +29,8 @@ public class ServerScore extends Application{
 	ClienteUDP cUDP = new ClienteUDP();
 	
 	//Se configura el puerto e ip de donde recogera los datos, por defecto lo dejamos asi :)
-    static int puertoServidor = 6789;
-	static String ip ="127.0.0.1";
+    static int puertoServidor = Pref.getPort();
+	static String ip =Pref.getIP();
 	
 	public static void main(String[] args) {
 		launch(args);

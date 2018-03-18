@@ -2,6 +2,9 @@ package scorePackUDP;
 
 import java.net.*;
 import java.util.ArrayList;
+
+import config.Pref;
+
 import java.io.*;
 
 public class ServidorUDP{
@@ -14,7 +17,7 @@ public class ServidorUDP{
 	
 	//creamos un espacio para guardar el dato del jugador
 	static ScorePlayer scorePlayer;
-	static int port = 6789;
+    static int port = Pref.getPort();
 	
 	public void start() throws SocketException {
 		System.out.println("servidor iniciado :)");
