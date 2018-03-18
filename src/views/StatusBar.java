@@ -1,8 +1,10 @@
 package views;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import config.Pref;
+import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -13,15 +15,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class StatusBar {
+public class StatusBar{
 	//parametros de la ventana	
 	int WITH = Pref.getWITH();
 	int HEIGHT = Pref.getHEIGHT();
 	Scene scene;
 	Group root;
 	
-	String lvl;
-	String character;
+	String lvl="1";
+	String character="ok";
 	
 	public StatusBar(String lvlExt, String charExt) {
 		lvl = lvlExt;
@@ -34,21 +36,29 @@ public class StatusBar {
 	public Group start(Stage primaryStage) throws Exception {
 		Group group = new Group();
 		
+		//creamos el background de la bara de status
+		File file = new File("src/img/statusBack.png");
+		ImageView bg = new ImageView(new String(file.toURI().toString()));
+		bg.setTranslateX(0);
+		bg.setTranslateY(HEIGHT-100);
+		group.getChildren().add(bg);
+		
 		//creamos los cuadros de status
 		ArrayList<Rectangle> rect = new ArrayList<>();
 		ArrayList<Double> pos = new ArrayList<>();
 		int rectW = 80;
 		int rectH = 40;
-		int marginTop = 20;
+		int marginTop = HEIGHT-60;
+		int marginLeft= 160;
 		//margin = marginLeft + rectW + marginRect -> 20 + 80 + 10 -> 110
 		rect.add(new Rectangle(20,marginTop,rectW,rectH));
-		pos.add((double) 20);
+		pos.add((double) marginLeft);
 		rect.add(new Rectangle(110,marginTop,rectW,rectH));
-		pos.add((double) 110);
+		pos.add((double) marginLeft+90);
 		rect.add(new Rectangle(200,marginTop,rectW,rectH));
-		pos.add((double) 200);
+		pos.add((double) marginLeft+180);
 		rect.add(new Rectangle(290,marginTop,rectW,rectH));
-		pos.add((double) 290);
+		pos.add((double) marginLeft+270);
 
 		// creamos el texto de los cuadros
 		text = new ArrayList<>();
@@ -74,9 +84,9 @@ public class StatusBar {
 		    group.getChildren().add(stack);
 		}
 		
-	    //Scene scene = new Scene(group, WITH, HEIGHT);
-	    //primaryStage.setScene(scene);
-	    //primaryStage.show();
+	    Scene scene = new Scene(group, WITH, HEIGHT);
+	    primaryStage.setScene(scene);
+	    primaryStage.show();
 	    return group;
 	}
 	

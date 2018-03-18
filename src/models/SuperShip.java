@@ -147,7 +147,7 @@ public class SuperShip{
 		if (nave == 3) {
 			cir.setStroke(Color.AQUA);
 		}else {
-			cir.setStroke(Color.AQUA);
+			cir.setStroke(Color.TRANSPARENT);
 		}
 		cir.setTranslateX(posx);
 		cir.setTranslateY(posy);

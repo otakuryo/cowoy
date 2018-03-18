@@ -50,8 +50,8 @@ public class Video {
 		
     	//agregamos la musica
     	fileSounds.add(new File("src/sounds/sound.m4a"));
-    	fileSounds.add(new File("src/sounds/catsMars.mp3"));
-    	fileSounds.add(new File("src/sounds/sound.m4a"));
+    	fileSounds.add(new File("src/sounds/rush.mp3"));
+    	fileSounds.add(new File("src/sounds/rush.mp3"));
     	fileSounds.add(new File("src/sounds/catsMars.mp3"));
     	for (int i = 0; i < fileSounds.size(); i++) {
     		MEDIA_URL_SOUNDS.add(fileSounds.get(i).toURI().toString());
